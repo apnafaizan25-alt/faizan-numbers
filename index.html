@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d19">
+<title>Faizan Numbers | Premium Phone Numbers</title>
+<meta name="description" content="Explore phone number listings for personal and business needs. Contact Faizan Numbers directly on WhatsApp.">
+
+<style>
+:root {
+  --bg:#080d19;
+  --panel:#101a2b;
+  --panel2:#142239;
+  --gold:#e9c477;
+  --white:#f7f8fc;
+  --muted:#aab6ca;
+  --border:#2b3950;
+  --green:#25d366;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:90px; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--white);
+}
+a { text-decoration:none; color:inherit; }
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+.container { width:min(1120px,92%); margin:auto; }
+.gold { color:var(--gold); }
+
+header {
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(8,13,25,.97);
+  border-bottom:1px solid var(--border);
+}
+.nav {
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.logo { font-size:23px; font-weight:800; letter-spacing:-.5px; }
+.logo span { color:var(--gold); }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--muted); font-size:14px; }
+.nav-links a:hover { color:var(--gold); }
+
+.btn {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  border:0;
+  border-radius:9px;
+  padding:14px 20px;
+  font-weight:800;
+  transition:.2s;
+}
+.btn-gold { background:var(--gold); color:#111827; }
+.btn-gold:hover { background:#f6dba1; transform:translateY(-1px); }
+.btn-outline { border:1px solid var(--gold); color:var(--gold); background:transparent; }
+.btn-outline:hover { background:var(--gold); color:#111827; }
+.btn-whatsapp { background:var(--green); color:#062b15; }
+.btn-whatsapp:hover { background:#53e589; }
+.btn-small { padding:12px; width:100%; margin-top:20px; }
+
+.hero {
+  text-align:center;
+  padding:95px 0 75px;
+  background:radial-gradient(ellipse at top,#263957 0%,var(--bg) 68%);
+}
+.eyebrow {
+  display:inline-block;
+  border:1px solid #655535;
+  background:#211d16;
+  color:var(--gold);
+  border-radius:30px;
+  padding:9px 14px;
+  font-size:11px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+h1 {
+  font-size:clamp(37px,6vw,68px);
+  line-height:1.08;
+  letter-spacing:-2px;
+  margin:24px 0 18px;
+}
+.hero p {
+  color:var(--muted);
+  line-height:1.8;
+  max-width:680px;
+  margin:0 auto;
+}
+.hero-actions {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:28px;
+}
+.trust {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:46px;
+}
+.trust-item {
+  background:rgba(16,26,43,.8);
+  border:1px solid var(--border);
+  padding:19px 12px;
+  border-radius:12px;
+}
+.trust-item strong { display:block; color:var(--gold); margin-bottom:8px; }
+.trust-item small { color:var(--muted); }
+
+.section { padding:68px 0; }
+.heading { margin-bottom:28px; }
+.heading h2 { font-size:clamp(27px,4vw,35px); margin:0 0 10px; }
+.heading p { color:var(--muted); line-height:1.7; margin:0; }
+
+.filters {
+  display:grid;
+  grid-template-columns:1fr 230px;
+  gap:12px;
+  margin-bottom:24px;
+}
+.filters input,.filters select {
+  width:100%;
+  padding:15px;
+  color:var(--white);
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  outline:none;
+}
+.filters input:focus,.filters select:focus { border-color:var(--gold); }
+.filters option { background:var(--panel); }
+
+.result-line { color:var(--muted); font-size:13px; margin:0 0 18px; }
+.cards {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.card {
+  min-width:0;
+  padding:23px;
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--border);
+  border-radius:15px;
+  transition:transform .2s,border-color .2s;
+}
+.card:hover { transform:translateY(-3px); border-color:#8d774c; }
+.card-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.tag {
+  font-size:11px;
+  color:var(--gold);
+  background:#292418;
+  padding:7px 10px;
+  border-radius:20px;
+}
+.status { color:#80e0a1; font-size:11px; }
+.number {
+  color:var(--gold);
+  font-size:clamp(20px,2vw,25px);
+  font-weight:800;
+  margin:25px 0 12px;
+  overflow-wrap:anywhere;
+}
+.description { color:var(--muted); font-size:13px; line-height:1.7; }
+.price { font-size:19px; font-weight:800; margin-top:21px; }
+.price-note { color:var(--muted); font-size:12px; margin-top:7px; }
+.no-results {
+  display:none;
+  border:1px dashed var(--border);
+  padding:30px;
+  border-radius:12px;
+  color:var(--muted);
+  text-align:center;
+}
+.demo-note {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin-top:20px;
+}
+
+.alt-bg {
+  background:#0c1423;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.features {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.feature {
+  border:1px solid var(--border);
+  background:var(--panel);
+  border-radius:13px;
+  padding:25px;
+}
+.feature-icon { font-size:26px; }
+.feature h3 { color:var(--gold); margin-bottom:10px; }
+.feature p { color:var(--muted); font-size:14px; line-height:1.8; }
+
+.contact-box {
+  text-align:center;
+  background:linear-gradient(130deg,#1b2c44,#101827);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:48px 22px;
+}
+.contact-box h2 { font-size:clamp(26px,4vw,36px); margin:0 0 14px; }
+.contact-box p { color:var(--muted); line-height:1.8; margin-bottom:24px; }
+
+.faq-list { display:grid; gap:12px; }
+details {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:17px;
+}
+summary { cursor:pointer; font-weight:bold; line-height:1.6; }
+details p { color:var(--muted); font-size:14px; line-height:1.8; }
+
+footer { padding:30px 0; color:var(--muted); font-size:13px; }
+.footer-inner {
+  border-top:1px solid var(--border);
+  padding-top:23px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.floating-wa {
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:30;
+  width:58px;
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--green);
+  color:#062b15;
+  border-radius:50%;
+  font-size:28px;
+  font-weight:bold;
+  box-shadow:0 5px 24px #0007;
+}
+.floating-wa:hover { transform:scale(1.06); }
+
+@media(max-width:850px) {
+  .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .features { grid-template-columns:1fr; }
+}
+@media(max-width:560px) {
+  .nav { min-height:67px; }
+  .logo { font-size:19px; }
+  .nav-links { gap:12px; }
+  .nav-links a { font-size:12px; }
+  .nav-links .optional { display:none; }
+  .hero { padding:68px 0 52px; }
+  h1 { letter-spacing:-1px; }
+  .trust { grid-template-columns:1fr; margin-top:30px; }
+  .section { padding:48px 0; }
+  .filters { grid-template-columns:1fr; }
+  .cards { grid-template-columns:1fr; }
+  .card { padding:21px; }
+  .floating-wa { right:14px; bottom:14px; width:54px; height:54px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="container nav">
+    <a class="logo" href="#">Faizan <span>Numbers</span></a>
+    <nav class="nav-links">
+      <a href="#numbers">Numbers</a>
+      <a class="optional" href="#why">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Premium Number Collection</span>
+    <h1>Find Your <span class="gold">Perfect Number</span></h1>
+    <p>
+      Explore phone number listings for personal and business needs.
+      Find a number that suits you and contact us directly for pricing
+      and availability.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="#numbers">Explore Numbers ↓</a>
+      <a class="btn btn-whatsapp" href="https://wa.me/923114484011?text=Hello%2C%20I%20am%20interested%20in%20your%20phone%20numbers." target="_blank" rel="noopener noreferrer">WhatsApp Us ↗</a>
+    </div>
+    <div class="trust">
+      <div class="trust-item"><strong>USA &amp; UK</strong><small>Number categories</small></div>
+      <div class="trust-item"><strong>Direct Contact</strong><small>WhatsApp inquiries</small></div>
+      <div class="trust-item"><strong>Simple Process</strong><small>Ask before ordering</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="numbers">
+  <div class="container">
+    <div class="heading">
+      <h2>Featured <span class="gold">Numbers</span></h2>
+      <p>Search by number, country or category.</p>
+    </div>
+
+    <div class="filters">
+      <input id="searchInput" type="search" placeholder="Search numbers, USA, UK..." aria-label="Search numbers">
+      <select id="categoryFilter" aria-label="Choose a category">
+        <option value="all">All Categories</option>
+        <option value="USA">USA Numbers</option>
+        <option value="UK">UK Numbers</option>
+        <option value="Toll-Free">Toll-Free Numbers</option>
+        <option value="Business">Business Numbers</option>
+      </select>
+    </div>
+
+    <p class="result-line" id="resultCount">3 demo listings</p>
+
+    <div class="cards" id="numberCards">
+      <article class="card" data-number="+1 800 555 0101" data-country="USA" data-type="Toll-Free">
+        <div class="card-top"><span class="tag">USA · Toll-Free</span><span class="status">● Demo listing</span></div>
+        <div class="number">+1 800 555 0101</div>
+        <p class="description">Example toll-free number listing. Ask us about your requirements.</p>
+        <div class="price">Contact for Price</div>
+        <div class="price-note">Availability must be confirmed.</div>
+        <a class="btn btn-outline btn-small inquiry-link" data-number-link="+1 800 555 0101" href="https://wa.me/923114484011?text=Hello" target="_blank" rel="noopener noreferrer">Inquire on WhatsApp ↗</a>
+      </article>
+
+      <article class="card" data-number="+1 888 555 0102" data-country="USA" data-type="Business">
+        <div class="card-top"><span class="tag">USA · Business</span><span class="status">● Demo listing</span></div>
+        <div class="number">+1 888 555 0102</div>
+        <p class="description">Example business number listing. Ask us about your requirements.</p>
+        <div class="price">Contact for Price</div>
+        <div class="price-note">Availability must be confirmed.</div>
+        <a class="btn btn-outline btn-small inquiry-link" data-number-link="+1 888 555 0102" href="https://wa.me/923114484011?text=Hello" target="_blank" rel="noopener noreferrer">Inquire on WhatsApp ↗</a>
+      </article>
+
+      <article class="card" data-number="+44 20 0000 0103" data-country="UK" data-type="Business">
+        <div class="card-top"><span class="tag">UK · Business</span><span class="status">● Demo listing</span></div>
+        <div class="number">+44 20 0000 0103</div>
+        <p class="description">Example UK business number listing. Ask us about your requirements.</p>
+        <div class="price">Contact for Price</div>
+        <div class="price-note">Availability must be confirmed.</div>
+        <a class="btn btn-outline btn-small inquiry-link" data-number-link="+44 20 0000 0103" href="https://wa.me/923114484011?text=Hello" target="_blank" rel="noopener noreferrer">Inquire on WhatsApp ↗</a>
+      </article>
+    </div>
+
+    <div class="no-results" id="noResults">No matching numbers found. Try another search.</div>
+    <p class="demo-note">
+      Important: These are example listings, not confirmed available phone numbers.
+      Replace them with your genuine inventory before publishing the website.
+    </p>
+  </div>
+</section>
+
+<section class="section alt-bg" id="why">
+  <div class="container">
+    <div class="heading">
+      <h2>Why Choose <span class="gold">Faizan Numbers?</span></h2>
+      <p>A straightforward way to browse listings and ask questions.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">✦</div>
+        <h3>Organized Listings</h3>
+        <p>Browse phone numbers by country and number category.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">↗</div>
+        <h3>Direct WhatsApp</h3>
+        <p>Send an inquiry directly to our WhatsApp number.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">◎</div>
+        <h3>Mobile Friendly</h3>
+        <p>Browse the website on your computer, tablet or mobile phone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <div class="heading">
+      <h2>Frequently Asked <span class="gold">Questions</span></h2>
+      <p>Some helpful information before you contact us.</p>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>How can I ask about a number?</summary>
+        <p>Click the WhatsApp inquiry button on a listing. WhatsApp will open with a prepared message if your device and browser support it.</p>
+      </details>
+      <details>
+        <summary>Are the displayed numbers available?</summary>
+        <p>The current listings are examples for website testing. Actual availability must be verified and genuine inventory added before launch.</p>
+      </details>
+      <details>
+        <summary>How much does a number cost?</summary>
+        <p>Contact us to discuss pricing. No fixed prices are advertised in this demo.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-box">
+      <h2>Need a <span class="gold">Specific Number?</span></h2>
+      <p>Tell us which country or category you need. Contact us on WhatsApp to discuss pricing and availability.</p>
+      <a class="btn btn-whatsapp" href="https://wa.me/923114484011?text=Hello%2C%20I%20would%20like%20to%20ask%20about%20phone%20numbers." target="_blank" rel="noopener noreferrer">Chat on WhatsApp ↗</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> Faizan Numbers. All rights reserved.</div>
+    <div>Premium Number Listings</div>
+  </div>
+</footer>
+
+<a class="floating-wa" href="https://wa.me/923114484011?text=Hello%2C%20I%20am%20interested%20in%20your%20phone%20numbers." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp" title="Chat on WhatsApp">W</a>
+
+<script>
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+
+function filterNumbers() {
+  const query = searchInput.value.toLowerCase().trim();
+  const category = categoryFilter.value;
+  const cards = document.querySelectorAll(".card");
+  let visible = 0;
+
+  cards.forEach(card => {
+    const number = card.dataset.number.toLowerCase();
+    const country = card.dataset.country;
+    const type = card.dataset.type;
+    const matchesSearch =
+      number.includes(query) ||
+      country.toLowerCase().includes(query) ||
+      type.toLowerCase().includes(query);
+    const matchesCategory =
+      category === "all" || country === category || type === category;
+    const show = matchesSearch && matchesCategory;
+
+    card.style.display = show ? "" : "none";
+    if (show) visible++;
+
+    const numberLink = card.querySelector(".inquiry-link");
+    const message = "Hello, I am interested in phone number " +
+      card.dataset.number +
+      ". Please confirm its price and availability.";
+    numberLink.href = "https://wa.me/923114484011?text=" +
+      encodeURIComponent(message);
+  });
+
+  document.getElementById("noResults").style.display =
+    visible === 0 ? "block" : "none";
+  document.getElementById("resultCount").textContent =
+    visible + (visible === 1 ? " listing shown" : " listings shown");
+}
+
+searchInput.addEventListener("input", filterNumbers);
+categoryFilter.addEventListener("change", filterNumbers);
+document.getElementById("year").textContent = new Date().getFullYear();
+filterNumbers();
+</script>
+</body>
+</html>
