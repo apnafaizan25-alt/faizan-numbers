@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add Funds | Faizan Numbers</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d19;color:#fff;font-family:Arial,sans-serif;padding:25px}
+main{max-width:520px;margin:40px auto;background:#111a2b;border:1px solid #29364b;border-radius:16px;padding:28px}
+h1{color:#e8bd69}
+p{color:#9baac0;line-height:1.5}
+label{display:block;margin:17px 0 7px}
+input,select{width:100%;padding:13px;background:#091323;border:1px solid #34445c;border-radius:8px;color:white}
+button{width:100%;padding:14px;margin-top:22px;background:#d6aa5c;color:#101522;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+#message{margin-top:17px;line-height:1.5}
+a{color:#e8bd69}
+</style>
+</head>
+<body>
+<main>
+<h1>Add Funds</h1>
+<p>Submit your deposit details. Your wallet will be credited after admin verification.</p>
+
+<form id="depositForm">
+<label>Deposit Amount (PKR)</label>
+<input id="amount" type="number" min="100" max="1000000" step="1" required placeholder="Enter amount">
+
+<label>Payment Method</label>
+<select id="method" required>
+<option value="">Select payment method</option>
+<option value="Bank Transfer">Bank Transfer</option>
+<option value="JazzCash">JazzCash</option>
+<option value="Easypaisa">Easypaisa</option>
+</select>
+
+<label>Transaction ID / Reference</label>
+<input id="reference" maxlength="120" required placeholder="Enter transaction reference">
+
+<label>Payment Proof URL (optional)</label>
+<input id="proof" type="url" maxlength="1000" placeholder="Paste a secure image link if available">
+
+<button id="submitBtn" type="submit">Submit Deposit Request</button>
+</form>
+
+<div id="message" role="status"></div>
+<p><a href="./customer-dashboard.html">Back to Dashboard</a></p>
+</main>
+
+<script>
+const URL="https://gusiqhkydrrvihvpsahd.supabase.co";
+const KEY="sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ";
+const db=window.supabase.createClient(URL,KEY);
+
+const message=document.getElementById("message");
+const button=document.getElementById("submitBtn");
+
+async function checkLogin(){
+ const {data,error}=await db.auth.getSession();
+ if(error)throw error;
+ if(!data.session){
+  window.location.replace("./auth.html");
+  return null;
+ }
+ return data.session.user;
+}
+
+document.getElementById("depositForm").addEventListener("submit",async(e)=>{
+ e.preventDefault();
+ button.disabled=true;
+ button.textContent="Submitting...";
+ message.textContent="";
+
+ try{
+  const user=await checkLogin();
+  if(!user)return;
+
+  const amount=Number(document.getElementById("amount").value);
+  const method=document.getElementById("method").value;
+  const reference=document.getElementById("reference").value.trim();
+  const proof=document.getElementById("proof").value.trim();
+
+  if(!Number.isSafeInteger(amount)||amount<100||amount>1000000)
+   throw new Error("Enter a whole PKR amount between 100 and 1,000,000.");
+
+  if(!reference)throw new Error("Transaction reference is required.");
+
+  const {error}=await db.from("payment_requests").insert({
+   user_id:user.id,
+   amount,
+   method,
+   reference,
+   proof_url:proof||null
+  });
+
+  if(error)throw error;
+
+  message.style.color="#65d69a";
+  message.textContent="Deposit request submitted successfully! Status: Pending. Your wallet will be updated after admin approval.";
+  document.getElementById("depositForm").reset();
+
+ }catch(error){
+  message.style.color="#ff8585";
+  message.textContent=error.message;
+ }finally{
+  button.disabled=false;
+  button.textContent="Submit Deposit Request";
+ }
+});
+</script>
+</body>
+</html>
