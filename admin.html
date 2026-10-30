@@ -4,21 +4,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faizan Numbers | Admin Panel</title>
+<title>Faizan Numbers - Admin Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080b12;color:#f5f5f5;font-family:Arial,sans-serif}
 header{padding:20px 6%;background:#111722;border-bottom:1px solid #b89445;display:flex;justify-content:space-between;align-items:center}
 .logo{font-size:22px;font-weight:bold;color:#d9b45b}
-button{background:#d9b45b;color:#111;border:0;padding:11px 17px;border-radius:7px;font-weight:bold;cursor:pointer}
-button:hover{opacity:.85}
-.secondary{background:#293243;color:white}
-.danger{background:#b83b3b;color:white}
 main{max-width:1150px;margin:35px auto;padding:0 18px}
 .card{background:#111722;border:1px solid #283142;border-radius:12px;padding:22px;margin-bottom:20px}
 h1,h2{margin-top:0}
 h2{color:#d9b45b}
+button{background:#d9b45b;color:#111;border:0;padding:11px 17px;border-radius:7px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#293243;color:white}
+.danger{background:#b83b3b;color:white}
 input,select{width:100%;padding:13px;margin:7px 0 15px;background:#080d16;border:1px solid #394456;border-radius:7px;color:white}
 label{font-size:13px;color:#c4cbd5}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -31,11 +31,15 @@ th{color:#d9b45b}
 .tablewrap{overflow-x:auto}
 .actions{display:flex;gap:7px}
 .actions button{padding:8px 10px;font-size:12px}
-#dashboard,#appHeader{display:none}
-#message{margin:12px 0;color:#e5c16a}
+#dashboard{display:none}
 #loginBox{max-width:430px;margin:70px auto}
+#message,#loginMessage{margin:12px 0;color:#e5c16a;overflow-wrap:anywhere}
 small{color:#aeb7c5}
-@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}header{padding:16px}}
+@media(max-width:700px){
+.grid{grid-template-columns:1fr 1fr}
+.formgrid{grid-template-columns:1fr}
+header{padding:16px}
+}
 </style>
 </head>
 <body>
@@ -46,88 +50,89 @@ small{color:#aeb7c5}
 </header>
 
 <main>
-  <section id="loginBox" class="card">
-    <h1>Admin Login</h1>
-    <p><small>Sign in with your authorized admin account.</small></p>
-    <label>Email Address</label>
-    <input id="email" type="email" placeholder="Your admin email">
-    <label>Password</label>
-    <input id="password" type="password" placeholder="Your password">
-    <button onclick="login()" style="width:100%">Login to Dashboard</button>
-    <div id="loginMessage"></div>
-  </section>
 
-  <section id="dashboard">
-    <h1>Admin Dashboard</h1>
-    <p><small>Manage your phone number inventory.</small></p>
+<section id="loginBox" class="card">
+  <h1>Admin Login</h1>
+  <p><small>Sign in with your authorized admin account.</small></p>
+  <label>Email Address</label>
+  <input id="email" type="email" placeholder="Admin email">
+  <label>Password</label>
+  <input id="password" type="password" placeholder="Password">
+  <button id="loginBtn" onclick="login()" style="width:100%">Login to Dashboard</button>
+  <div id="loginMessage"></div>
+</section>
 
-    <div class="grid">
-      <div class="stat">Total Numbers<strong id="totalCount">0</strong></div>
-      <div class="stat">Available<strong id="availableCount">0</strong></div>
-      <div class="stat">Sold<strong id="soldCount">0</strong></div>
-      <div class="stat">Other Status<strong id="otherCount">0</strong></div>
-    </div>
+<section id="dashboard">
+  <h1>Admin Dashboard</h1>
+  <p><small>Manage your phone number inventory.</small></p>
 
-    <div class="card" style="margin-top:22px">
-      <h2 id="formTitle">Add New Number</h2>
-      <form id="numberForm">
-        <div class="formgrid">
-          <div>
-            <label>Country</label>
-            <input id="country" required placeholder="USA">
-          </div>
-          <div>
-            <label>Phone Number</label>
-            <input id="phone" required placeholder="+1 202 555 0100">
-          </div>
-          <div>
-            <label>Category</label>
-            <input id="category" required placeholder="Local / Toll Free">
-          </div>
-          <div>
-            <label>Price</label>
-            <input id="price" type="number" min="0" step="0.01" required placeholder="25">
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="status">
-              <option value="available">Available</option>
-              <option value="sold">Sold</option>
-            </select>
-          </div>
+  <div class="grid">
+    <div class="stat">Total Numbers<strong id="totalCount">0</strong></div>
+    <div class="stat">Available<strong id="availableCount">0</strong></div>
+    <div class="stat">Sold<strong id="soldCount">0</strong></div>
+    <div class="stat">Other<strong id="otherCount">0</strong></div>
+  </div>
+
+  <div class="card" style="margin-top:22px">
+    <h2 id="formTitle">Add New Number</h2>
+    <form id="numberForm">
+      <div class="formgrid">
+        <div>
+          <label>Country</label>
+          <input id="country" required placeholder="USA">
         </div>
-        <button type="submit" id="saveBtn">Add Number</button>
-        <button type="button" class="secondary" onclick="resetForm()">Cancel Edit</button>
-        <div id="message"></div>
-      </form>
-    </div>
-
-    <div class="card">
-      <h2>Number Inventory</h2>
-      <button class="secondary" onclick="loadNumbers()">Refresh Numbers</button>
-      <div class="tablewrap" style="margin-top:15px">
-        <table>
-          <thead>
-            <tr>
-              <th>Country</th>
-              <th>Phone Number</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="numberRows">
-            <tr><td colspan="6">Loading...</td></tr>
-          </tbody>
-        </table>
+        <div>
+          <label>Phone Number</label>
+          <input id="phone" required placeholder="+1 202 555 0100">
+        </div>
+        <div>
+          <label>Category</label>
+          <input id="category" required placeholder="Local / Toll Free">
+        </div>
+        <div>
+          <label>Price</label>
+          <input id="price" type="number" min="0" step="0.01" required placeholder="25">
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="status">
+            <option value="Available">Available</option>
+            <option value="Sold">Sold</option>
+          </select>
+        </div>
       </div>
+      <button type="submit" id="saveBtn">Add Number</button>
+      <button type="button" class="secondary" onclick="resetForm()">Cancel Edit</button>
+      <div id="message"></div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Number Inventory</h2>
+    <button class="secondary" onclick="loadNumbers()">Refresh Numbers</button>
+    <div class="tablewrap" style="margin-top:15px">
+      <table>
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Phone Number</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="numberRows">
+          <tr><td colspan="6">Loading...</td></tr>
+        </tbody>
+      </table>
     </div>
-  </section>
+  </div>
+</section>
+
 </main>
 
 <script>
-// Your Supabase project settings
 const SUPABASE_URL = "https://gusiqhkydrrvihvpsahd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ";
 
@@ -136,31 +141,41 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let editingId = null;
 let numbers = [];
 
-function showMessage(text, isError=false) {
+function message(text, error=false) {
   const el = document.getElementById("message");
   el.textContent = text;
-  el.style.color = isError ? "#ff7777" : "#e5c16a";
+  el.style.color = error ? "#ff7777" : "#e5c16a";
 }
 
-function showLoginMessage(text) {
+function loginMessage(text) {
   document.getElementById("loginMessage").textContent = text;
+}
+
+function showDashboard(isAdmin) {
+  document.getElementById("loginBox").style.display = isAdmin ? "none" : "block";
+  document.getElementById("dashboard").style.display = isAdmin ? "block" : "none";
+  document.getElementById("logoutBtn").style.display = isAdmin ? "block" : "none";
 }
 
 async function login() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
+  const btn = document.getElementById("loginBtn");
 
   if (!email || !password) {
-    showLoginMessage("Enter your email and password.");
+    loginMessage("Enter email and password.");
     return;
   }
 
-  showLoginMessage("Signing in...");
+  btn.disabled = true;
+  loginMessage("Signing in...");
 
   const { error } = await db.auth.signInWithPassword({ email, password });
 
+  btn.disabled = false;
+
   if (error) {
-    showLoginMessage(error.message);
+    loginMessage(error.message);
     return;
   }
 
@@ -168,9 +183,9 @@ async function login() {
 }
 
 async function checkAdmin() {
-  const { data: { user } } = await db.auth.getUser();
+  const { data: { user }, error: authError } = await db.auth.getUser();
 
-  if (!user) {
+  if (authError || !user) {
     showDashboard(false);
     return;
   }
@@ -184,7 +199,7 @@ async function checkAdmin() {
   if (error || !data) {
     await db.auth.signOut();
     showDashboard(false);
-    showLoginMessage(error ? error.message : "This account is not an approved admin.");
+    loginMessage(error ? error.message : "This account is not an approved admin.");
     return;
   }
 
@@ -192,26 +207,25 @@ async function checkAdmin() {
   await loadNumbers();
 }
 
-function showDashboard(isAdmin) {
-  document.getElementById("loginBox").style.display = isAdmin ? "none" : "block";
-  document.getElementById("dashboard").style.display = isAdmin ? "block" : "none";
-  document.getElementById("logoutBtn").style.display = isAdmin ? "block" : "none";
-}
-
 async function logout() {
   await db.auth.signOut();
   showDashboard(false);
   resetForm();
+  loginMessage("You have logged out.");
 }
 
 async function loadNumbers() {
+  const rows = document.getElementById("numberRows");
+  rows.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
+
   const { data, error } = await db
     .from("phone_numbers")
     .select("*")
     .order("created_at", { ascending: false });
 
   if (error) {
-    showMessage("Could not load numbers: " + error.message, true);
+    rows.innerHTML = '<tr><td colspan="6">Could not load numbers.</td></tr>';
+    message("Loading error: " + error.message, true);
     return;
   }
 
@@ -220,15 +234,18 @@ async function loadNumbers() {
 }
 
 function renderNumbers() {
-  const rows = document.getElementById("numberRows");
-
   document.getElementById("totalCount").textContent = numbers.length;
+
   document.getElementById("availableCount").textContent =
-    numbers.filter(n => n.status === "available").length;
+    numbers.filter(n => n.status === "Available").length;
+
   document.getElementById("soldCount").textContent =
-    numbers.filter(n => n.status === "sold").length;
+    numbers.filter(n => n.status === "Sold").length;
+
   document.getElementById("otherCount").textContent =
-    numbers.filter(n => !["available", "sold"].includes(n.status)).length;
+    numbers.filter(n => !["Available", "Sold"].includes(n.status)).length;
+
+  const rows = document.getElementById("numberRows");
 
   if (!numbers.length) {
     rows.innerHTML = '<tr><td colspan="6">No numbers added yet.</td></tr>';
@@ -244,8 +261,8 @@ function renderNumbers() {
       <td>${safe(n.status)}</td>
       <td>
         <div class="actions">
-          <button onclick="editNumber('${n.id}')">Edit</button>
-          <button class="danger" onclick="deleteNumber('${n.id}')">Delete</button>
+          <button onclick="editNumber('${safe(n.id)}')">Edit</button>
+          <button class="danger" onclick="deleteNumber('${safe(n.id)}')">Delete</button>
         </div>
       </td>
     </tr>
@@ -254,8 +271,11 @@ function renderNumbers() {
 
 function safe(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;",
-    '"':"&quot;", "'":"&#39;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
   }[c]));
 }
 
@@ -272,29 +292,32 @@ document.getElementById("numberForm").addEventListener("submit", async function(
 
   if (!record.country || !record.phone_number || !record.category ||
       !Number.isFinite(record.price) || record.price < 0) {
-    showMessage("Please enter valid details.", true);
+    message("Please enter valid details.", true);
     return;
   }
 
-  document.getElementById("saveBtn").disabled = true;
-  showMessage("Saving...");
+  const btn = document.getElementById("saveBtn");
+  btn.disabled = true;
+  message("Saving...");
 
   let result;
 
-  if (editingId) {
-    result = await db.from("phone_numbers").update(record).eq("id", editingId);
+  if (editingId !== null) {
+    result = await db.from("phone_numbers")
+      .update(record)
+      .eq("id", editingId);
   } else {
     result = await db.from("phone_numbers").insert(record);
   }
 
-  document.getElementById("saveBtn").disabled = false;
+  btn.disabled = false;
 
   if (result.error) {
-    showMessage("Error: " + result.error.message, true);
+    message("Error: " + result.error.message, true);
     return;
   }
 
-  showMessage(editingId ? "Number updated successfully." : "Number added successfully.");
+  message(editingId !== null ? "Number updated successfully." : "Number added successfully.");
   resetForm();
   await loadNumbers();
 });
@@ -304,27 +327,33 @@ function editNumber(id) {
   if (!n) return;
 
   editingId = n.id;
+
   document.getElementById("country").value = n.country || "";
   document.getElementById("phone").value = n.phone_number || "";
   document.getElementById("category").value = n.category || "";
-  document.getElementById("price").value = n.price || 0;
-  document.getElementById("status").value = n.status || "available";
+  document.getElementById("price").value = n.price ?? "";
+  document.getElementById("status").value = n.status || "Available";
+
   document.getElementById("formTitle").textContent = "Edit Number";
   document.getElementById("saveBtn").textContent = "Update Number";
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
 async function deleteNumber(id) {
   if (!confirm("Are you sure you want to delete this number?")) return;
 
-  const { error } = await db.from("phone_numbers").delete().eq("id", id);
+  const { error } = await db
+    .from("phone_numbers")
+    .delete()
+    .eq("id", id);
 
   if (error) {
-    showMessage("Delete failed: " + error.message, true);
+    message("Delete failed: " + error.message, true);
     return;
   }
 
-  showMessage("Number deleted.");
+  message("Number deleted successfully.");
   await loadNumbers();
 }
 
@@ -337,10 +366,12 @@ function resetForm() {
 
 (async function start() {
   const { data: { session } } = await db.auth.getSession();
+
   if (session) {
     await checkAdmin();
   }
 })();
 </script>
+
 </body>
 </html>
