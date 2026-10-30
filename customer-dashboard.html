@@ -1,492 +1,216 @@
+from pathlib import Path
 
-<!DOCTYPE html>
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Premium SMS | Number Store Dashboard</title>
+<title>Premium SMS | Customer Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#070d1e;--sidebar:#0a1229;--panel:#111c36;--panel2:#152242;--panel3:#0e182f;
-  --border:#1d2c4e;--border2:#24365f;
-  --accent:#f3d07a;--accent-rgb:243,208,122;--accent2:#ffe9a8;--accent-glow:rgba(243,208,122,.28);
-  --white:#eef2ff;--muted:#7e8db0;--muted2:#5a6b8e;--green:#22c55e;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-button{cursor:pointer;font:inherit}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:270px;background:var(--sidebar);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;z-index:20}
-.logo-area{height:64px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--sidebar)}
-.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#c69a4a);display:grid;place-items:center;font-weight:900;color:#111;box-shadow:0 6px 18px var(--accent-glow);font-size:16px}
-.logo-text{font-weight:900;font-size:15px;letter-spacing:-.4px;line-height:1}
-.logo-text b{color:var(--accent)}
-.logo-text small{display:block;font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-.menu{padding:14px 12px;display:grid;gap:18px}
-.menu-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);padding:0 10px}
-.menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--muted);font-size:13px;font-weight:600;transition:.18s;border:1px solid transparent}
-.menu-item:hover{background:rgba(255,255,255,.04);color:var(--white);border-color:var(--border)}
-.menu-item.active{background:linear-gradient(90deg,rgba(var(--accent-rgb),.16),rgba(var(--accent-rgb),.04));border-color:rgba(var(--accent-rgb),.30);color:var(--white)}
-.menu-item .ico{width:20px;text-align:center}
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
-.topbar{height:64px;background:rgba(7,13,30,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:10}
-.currency{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--border);font-size:12px;font-weight:700}
-.top-right{display:flex;align-items:center;gap:10px}
-.btn{padding:9px 14px;border-radius:10px;border:0;font-weight:800;font-size:12px;display:inline-flex;align-items:center;gap:6px;transition:.18s;white-space:nowrap}
-.btn-accent{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;box-shadow:0 6px 18px var(--accent-glow)}
-.btn-accent:hover{transform:translateY(-1px)}
-.btn-ghost{background:var(--panel);border:1px solid var(--border);color:var(--white)}
-.btn-wa{background:#22c55e;color:#05210f}
-.user{display:flex;align-items:center;gap:10px;padding:6px 10px 6px 6px;border-radius:100px;background:var(--panel);border:1px solid var(--border)}
-.user-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#c69a4a);display:grid;place-items:center;font-weight:900;color:#111;font-size:13px}
-.user-info{line-height:1.1}
-.user-info strong{font-size:12px;display:block}
-.user-info span{font-size:10px;color:var(--muted)}
-.content{padding:18px 22px 30px}
-.welcome{background:linear-gradient(90deg,#1a2746 0%,#101a32 60%,#111d38 100%);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
-.welcome::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
-.welcome .left small{font-size:11px;color:var(--muted)}
-.welcome .left h3{margin:4px 0 0;font-size:18px;font-weight:900}
-.wallet{display:flex;align-items:center;gap:14px}
-.wallet .bal{text-align:right}
-.wallet .bal small{font-size:11px;color:var(--muted);display:block}
-.wallet .bal strong{font-size:16px}
-.btn-topup{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;padding:8px 16px;border-radius:100px;font-weight:900;border:0;box-shadow:0 4px 14px var(--accent-glow)}
-.store-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:22px 0 14px}
-.store-head h1{font-size:26px;font-weight:900;letter-spacing:-.6px;margin:0}
-.store-head h1 span{color:var(--accent)}
-.store-head p{margin:4px 0 0;color:var(--muted);font-size:12.5px}
-.explore-label{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px}
-.explore-label strong{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted2)}
-.services{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
-.services::-webkit-scrollbar{display:none}
-.service-pill{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:.18s}
-.service-pill.active{background:rgba(var(--accent-rgb),.14);border-color:rgba(var(--accent-rgb),.35);color:var(--white);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.08)}
-.s-ico{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:900}
-.s-ico.all{background:var(--accent);color:#111}
-.s-ico.gold{background:var(--accent);color:#111}
-.s-ico.usa{background:#1e3a5f;color:#93c5fd}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;overflow:hidden;transition:.2s;display:flex;flex-direction:column}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.35),transparent)}
-.card:hover{transform:translateY(-2px);border-color:var(--border2);box-shadow:0 10px 28px rgba(0,0,0,.35)}
-.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.card-icon{width:38px;height:38px;border-radius:10px;background:rgba(var(--accent-rgb),.12);border:1px solid rgba(var(--accent-rgb),.22);display:grid;place-items:center;color:var(--accent);font-weight:900}
-.card-country{font-size:11px;font-weight:800;letter-spacing:.6px;color:var(--muted);padding:5px 8px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid var(--border)}
-.card-title{font-size:13px;font-weight:800;line-height:1.35;margin:0 0 6px}
-.card-desc{font-size:11.5px;color:var(--muted);line-height:1.6;min-height:38px;margin:0 0 12px}
-.stock-box{background:var(--panel3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.stock-box .label{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.6px;font-weight:700}
-.stock-box .val{font-size:13px;font-weight:800}
-.stock-box .price{font-size:14px;font-weight:900;color:var(--accent)}
-.selects{display:grid;gap:8px;margin-bottom:10px}
-.selects select{width:100%;padding:10px 12px;border-radius:9px;background:#0e182f;border:1px solid var(--border);color:var(--white);font-size:12px;outline:none}
-.matched{font-size:10px;color:var(--muted2);text-align:right;margin-bottom:10px}
-.buy-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.qty{display:flex;align-items:center;background:#0e182f;border:1px solid var(--border);border-radius:9px;overflow:hidden}
-.qty button{width:30px;height:36px;border:0;background:transparent;color:var(--white);font-weight:800}
-.qty span{width:28px;text-align:center;font-size:13px;font-weight:700}
-.btn-buy{flex:1;height:36px;border-radius:9px;border:0;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 16px var(--accent-glow)}
-.btn-out{flex:1;height:36px;border-radius:9px;background:#3f1d2a;border:1px solid #7f1d1d;color:#fca5a5;font-weight:800;font-size:11px}
-.subtotal{display:flex;justify-content:space-between;font-size:10px;color:var(--muted2)}
-.subtotal strong{color:var(--white)}
-.theme-modal,.payment-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;place-items:center;padding:16px}
-.theme-modal.open,.payment-modal.open{display:grid}
-.theme-box,.payment-box{width:min(440px,100%);background:var(--panel);border:1px solid var(--border2);border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
-.swatch{height:44px;border-radius:10px;border:2px solid transparent;cursor:pointer;display:grid;place-items:center;font-size:10px;font-weight:800;color:#111;transition:.18s}
-.swatch.active{border-color:#fff;box-shadow:0 0 0 3px var(--accent-glow)}
-.payment-box h2{font-size:19px;margin:0}
-.payment-box p{font-size:12px;color:var(--muted);line-height:1.6}
-.payment-field{margin-top:14px}
-.payment-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:7px}
-.payment-field input,.payment-field select{width:100%;padding:12px;border-radius:9px;background:#0e182f;border:1px solid var(--border);color:var(--white);outline:none;font:inherit;font-size:13px}
-.payment-actions{display:flex;gap:9px;margin-top:20px}
-.payment-actions button{flex:1;justify-content:center}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:#111827;border:1px solid var(--border);color:#fff;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:200}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:1300px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.sidebar{position:fixed;transform:translateX(-100%);transition:.28s}.sidebar.open{transform:translateX(0)}}
-@media(max-width:600px){.grid{grid-template-columns:1fr}.content{padding:14px}.welcome{flex-direction:column;align-items:flex-start;gap:15px}.topbar{padding:0 12px}.top-right .btn-ghost{display:none}.user-info{display:none}.store-head{align-items:flex-start;flex-direction:column}}
+:root{--bg:#070d1e;--sidebar:#0a1229;--panel:#111c36;--panel2:#152242;--panel3:#0e182f;--border:#1d2c4e;--border2:#30436d;--accent:#f3d07a;--accent2:#ffe9a8;--accent-rgb:243,208,122;--glow:rgba(243,208,122,.22);--white:#eef2ff;--muted:#91a0c1;--muted2:#68799d;--green:#22c55e;--red:#fb7185}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.hidden{display:none!important}.auth-wrap{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,#1a2b50 0,transparent 38%),var(--bg)}.auth-card{width:min(440px,100%);background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--border2);border-radius:22px;padding:28px;box-shadow:0 25px 80px #0008}.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--accent),#bd9144);display:grid;place-items:center;color:#111;font-weight:900;font-size:20px}.brand strong{font-size:17px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:3px}.auth-card h1{font-size:24px;margin:0 0 7px}.muted{color:var(--muted);font-size:13px;line-height:1.6}.field{margin-top:15px}.field label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:7px}.field input,.field select{width:100%;background:#0b1530;border:1px solid var(--border2);border-radius:10px;padding:12px;color:var(--white);outline:none}.field input:focus,.field select:focus{border-color:var(--accent)}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111}.secondary{background:var(--panel);border:1px solid var(--border2);color:var(--white)}.success{background:#14532d;color:#bbf7d0}.danger{background:#4c1d2a;color:#fecdd3}.full{width:100%;margin-top:18px}.auth-switch{margin-top:16px;text-align:center;color:var(--muted);font-size:12px}.link-btn{background:none;border:0;color:var(--accent);font-weight:800}
+.layout{display:flex;min-height:100vh}.sidebar{width:255px;background:var(--sidebar);border-right:1px solid var(--border);position:fixed;inset:0 auto 0 0;overflow:auto;z-index:30;transition:.25s}.logo-area{height:68px;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--sidebar)}.logo-area .brand-mark{width:35px;height:35px;font-size:16px;border-radius:10px}.logo-area .brand{margin:0}.menu{padding:18px 12px}.menu-label{font-size:10px;color:var(--muted2);font-weight:800;letter-spacing:1px;margin:14px 10px 8px}.nav{display:flex;align-items:center;gap:11px;width:100%;padding:11px 12px;border-radius:10px;border:1px solid transparent;background:none;color:var(--muted);text-align:left;font-size:12px;font-weight:700;margin:3px 0}.nav:hover,.nav.active{background:#f3d07a18;border-color:#f3d07a44;color:var(--white)}.main{margin-left:255px;min-width:0;flex:1}.topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--border);background:#070d1eeF;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}.topbar-left,.topbar-right{display:flex;align-items:center;gap:10px}.currency,.user-chip{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:11px;font-weight:800}.user-chip{display:flex;align-items:center;gap:9px}.avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#111;font-weight:900}.content{padding:22px;max-width:1500px;margin:auto}.welcome{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 22px;border-radius:16px;border:1px solid var(--border);background:linear-gradient(100deg,#1a294b,#101a32);position:relative;overflow:hidden}.welcome:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}.welcome h2{font-size:18px;margin:5px 0}.welcome small{color:var(--muted);font-size:11px}.balance{text-align:right}.balance strong{display:block;font-size:22px;margin:4px 0 8px;color:var(--accent)}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:25px 0 14px}.section-head h1,.section-head h2{margin:0;font-size:23px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:12px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.toolbar input,.toolbar select{background:var(--panel);border:1px solid var(--border);color:var(--white);padding:10px 12px;border-radius:9px;min-width:160px}.chips{display:flex;gap:8px;overflow:auto;padding:2px 0 12px}.chip{white-space:nowrap;border:1px solid var(--border);background:var(--panel);color:var(--muted);border-radius:9px;padding:9px 13px;font-size:11px;font-weight:800}.chip.active{color:var(--white);background:#f3d07a1c;border-color:#f3d07a66}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.product{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--border);border-radius:15px;padding:16px;min-width:0}.product-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.flag{font-size:22px}.tag{font-size:10px;color:var(--muted);background:#ffffff0a;border:1px solid var(--border);border-radius:7px;padding:5px 8px}.product h3{font-size:14px;margin:0 0 8px;overflow-wrap:anywhere}.number{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent);overflow-wrap:anywhere;margin:8px 0}.product-meta{display:flex;justify-content:space-between;align-items:center;background:var(--panel3);padding:11px;border:1px solid var(--border);border-radius:9px;margin:12px 0}.product-meta small{display:block;color:var(--muted2);font-size:9px;text-transform:uppercase;letter-spacing:.6px}.product-meta strong{font-size:14px}.product-meta .price{color:var(--accent);font-size:16px}.product .btn{width:100%}.empty,.loading{padding:35px 15px;text-align:center;color:var(--muted);border:1px dashed var(--border2);border-radius:13px;font-size:13px;grid-column:1/-1}.panel{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:18px;margin-top:18px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:600px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);font-size:11px}th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}td{color:#dce4fa}.status{display:inline-block;border-radius:20px;padding:5px 8px;font-size:10px;background:#14532d;color:#bbf7d0}.status.pending{background:#713f12;color:#fde68a}.modal{position:fixed;inset:0;background:#000b;z-index:100;display:none;place-items:center;padding:15px}.modal.open{display:grid}.modal-box{width:min(460px,100%);background:var(--panel);border:1px solid var(--border2);border-radius:17px;padding:21px;max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px;margin:0}.close{background:transparent;color:var(--white);border:1px solid var(--border);border-radius:8px;padding:6px 10px}.hint{font-size:11px;color:var(--muted);line-height:1.6}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#111c36;border:1px solid var(--border2);padding:12px 16px;border-radius:10px;z-index:200;font-size:12px;transition:.2s;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.mobile-menu{display:none}
+@media(max-width:1150px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:850px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.mobile-menu{display:inline-flex}.content{padding:16px}.topbar{padding:0 14px}}@media(max-width:560px){.grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.balance{text-align:left}.topbar-right .user-chip{display:none}.section-head{align-items:flex-start;flex-direction:column}.content{padding:12px}.auth-card{padding:22px}}
 </style>
 </head>
-
 <body>
-<div class="layout">
+<section id="authView" class="auth-wrap">
+ <div class="auth-card">
+  <div class="brand"><div class="brand-mark">P</div><div><strong>Premium SMS</strong><small>Secure customer portal</small></div></div>
+  <h1 id="authTitle">Welcome back</h1><p class="muted" id="authSubtitle">Sign in to access your wallet and number store.</p>
+  <div id="nameField" class="field hidden"><label>Full name (optional)</label><input id="fullName" maxlength="100" placeholder="Your name"></div>
+  <div class="field"><label>Email address</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+  <div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></div>
+  <button class="btn primary full" id="authSubmit" onclick="submitAuth()">Sign In</button>
+  <div class="auth-switch"><span id="authSwitchText">Don't have an account?</span> <button class="link-btn" id="authSwitch" onclick="toggleAuthMode()">Create account</button></div>
+  <p class="hint" style="margin-top:18px">Use your own account and only purchase numbers/services you are authorized to use. Never share your password or OTP.</p>
+ </div>
+</section>
 
-<aside class="sidebar" id="sidebar">
-  <div class="logo-area">
-    <div class="logo-mark" id="logoMark">P</div>
-    <div class="logo-text"><b>Premium</b> SMS<small>SMS Vault • Since 2024</small></div>
-    <button class="btn btn-ghost" style="margin-left:auto;padding:6px 8px;font-size:10px" onclick="toggleSidebar()">✕</button>
-  </div>
-
-  <div class="menu">
-    <div>
-      <div class="menu-label">Main Menu</div>
-      <a class="menu-item active" href="#"><span class="ico">🏠</span> Dashboard</a>
-      <a class="menu-item" href="#"><span class="ico">🛍️</span> Number Store</a>
-      <a class="menu-item" href="#"><span class="ico">📦</span> Active Numbers</a>
-      <a class="menu-item" href="#"><span class="ico">🧾</span> My Orders</a>
-      <a class="menu-item" href="#"><span class="ico">📧</span> Gmail Lab</a>
-      <a class="menu-item" href="#"><span class="ico">📧</span> Outlook Lab</a>
-      <a class="menu-item" href="#"><span class="ico">🔐</span> OTP Store</a>
-      <a class="menu-item" href="#"><span class="ico">💎</span> Golden Numbers</a>
-    </div>
-
-    <div>
-      <div class="menu-label">Account</div>
-      <a class="menu-item" href="#" onclick="openPayment();return false"><span class="ico">👛</span> Wallet / Add Balance</a>
-      <a class="menu-item" href="#" onclick="openTheme();return false"><span class="ico">🎨</span> Themes - Choose Colour</a>
-      <a class="menu-item" href="https://wa.me/923114484011?text=Hello%20Premium%20SMS" target="_blank"><span class="ico">💬</span> WhatsApp Support</a>
-      <a class="menu-item" href="#"><span class="ico">⚙️</span> Settings</a>
-      <a class="menu-item" href="#" onclick="showToast('Login system abhi connect nahi hai');return false"><span class="ico">🚪</span> Logout</a>
-    </div>
-  </div>
-</aside>
-
-<div class="main">
+<div id="appView" class="layout hidden">
+ <aside class="sidebar" id="sidebar">
+  <div class="logo-area"><div class="brand-mark">P</div><div class="brand"><div><strong>Premium SMS</strong><small>Customer portal</small></div></div></div>
+  <nav class="menu">
+   <div class="menu-label">Store</div>
+   <button class="nav active" data-page="store" onclick="showPage('store',this)">🏠 Number Store</button>
+   <button class="nav" data-page="orders" onclick="showPage('orders',this)">🧾 My Orders</button>
+   <button class="nav" data-page="wallet" onclick="showPage('wallet',this)">👛 Wallet & Deposits</button>
+   <div class="menu-label">Account</div>
+   <a class="nav" href="https://wa.me/923114484011?text=Hello%20Premium%20SMS" target="_blank" rel="noopener">💬 WhatsApp Support</a>
+   <button class="nav" onclick="signOut()">↪ Sign Out</button>
+  </nav>
+ </aside>
+ <main class="main">
   <header class="topbar">
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="btn btn-ghost" onclick="toggleSidebar()" style="padding:8px 10px">☰</button>
-      <div class="currency"><span style="width:20px;height:20px;border-radius:6px;background:var(--accent);display:grid;place-items:center;color:#111;font-weight:900;font-size:12px">₨</span> Currency <span style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;font-size:10px">PKR</span></div>
-    </div>
-
-    <div class="top-right">
-      <button class="btn btn-ghost" onclick="openTheme()">🎨 Change Colour</button>
-      <a class="btn btn-wa" href="https://wa.me/923114484011?text=Hello%20Premium%20SMS" target="_blank">WhatsApp ↗</a>
-      <div class="user">
-        <div class="user-avatar">P</div>
-        <div class="user-info"><strong>Premium SMS</strong><span>Customer Account</span></div>
-      </div>
-    </div>
+   <div class="topbar-left"><button class="btn secondary mobile-menu" onclick="toggleSidebar()">☰</button><div class="currency">₨ &nbsp; Currency: PKR</div></div>
+   <div class="topbar-right"><button class="btn secondary" onclick="refreshAll()">↻ Refresh</button><div class="user-chip"><div class="avatar" id="avatar">P</div><span id="userEmail">Customer</span></div></div>
   </header>
-
   <div class="content">
-    <div class="welcome">
-      <div class="left">
-        <small>Welcome back</small>
-        <h3>Premium SMS — Official Store</h3>
-        <small style="color:var(--accent);font-weight:700">● Premium SMS Customer Portal</small>
-      </div>
-      <div class="wallet">
-        <div class="bal"><small>Wallet Balance</small><strong id="walletBal">Rs.0</strong></div>
-        <button class="btn-topup" onclick="topUp()">+ Add Balance</button>
-      </div>
-    </div>
-
-    <div class="store-head">
-      <div>
-        <h1>Premium <span>SMS Store</span></h1>
-        <p>Explore available business phone-number products and services.</p>
-      </div>
-      <a class="btn btn-accent" href="https://wa.me/923114484011?text=Custom%20Number%20Request%20-%20Premium%20SMS" target="_blank">+ Custom Request</a>
-    </div>
-
-    <div class="explore-label"><strong>Explore by Service — Premium SMS Categories</strong><span id="prodCount"></span></div>
-    <div class="services" id="services"></div>
-    <div class="grid" id="grid"></div>
-
-    <p style="font-size:11px;color:var(--muted2);margin-top:16px;line-height:1.6">
-      Premium SMS — Demo inventory. Real inventory and wallet payments require a secure database connection.
-    </p>
+   <section class="welcome"><div><small>WELCOME TO YOUR ACCOUNT</small><h2>Premium SMS — Official Store</h2><small>Secure inventory • Wallet checkout • Order history</small></div><div class="balance"><small>Available wallet balance</small><strong id="walletBalance">Rs. 0.00</strong><button class="btn primary" onclick="openDeposit()">＋ Add Balance</button></div></section>
+   <section id="storePage">
+    <div class="section-head"><div><h1>Number Store</h1><p>Live inventory loaded from your connected database.</p></div><button class="btn secondary" onclick="loadNumbers()">↻ Reload stock</button></div>
+    <div class="toolbar"><input id="searchBox" placeholder="Search number, country or category..." oninput="renderNumbers()"><select id="countryFilter" onchange="renderNumbers()"><option value="">All countries</option></select></div>
+    <div class="chips" id="categoryChips"></div>
+    <div class="grid" id="numberGrid"><div class="loading">Loading available inventory...</div></div>
+   </section>
+   <section id="ordersPage" class="hidden">
+    <div class="section-head"><div><h1>My Orders</h1><p>Your purchases linked to your account.</p></div><button class="btn secondary" onclick="loadOrders()">↻ Refresh orders</button></div>
+    <div class="panel table-wrap"><table><thead><tr><th>Order ID</th><th>Product</th><th>Number</th><th>Quantity</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="ordersBody"><tr><td colspan="7">Loading...</td></tr></tbody></table></div>
+   </section>
+   <section id="walletPage" class="hidden">
+    <div class="section-head"><div><h1>Wallet & Deposits</h1><p>Submit a deposit request. Admin verifies it before crediting your wallet.</p></div><button class="btn primary" onclick="openDeposit()">＋ Add Balance</button></div>
+    <div class="panel"><h3 style="margin:0 0 5px;font-size:14px">Wallet transactions</h3><div class="table-wrap"><table><thead><tr><th>Type</th><th>Amount</th><th>Status</th><th>Description</th><th>Date</th></tr></thead><tbody id="transactionsBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
+    <div class="panel"><h3 style="margin:0 0 5px;font-size:14px">My deposit requests</h3><div class="table-wrap"><table><thead><tr><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th><th>Date</th></tr></thead><tbody id="paymentsBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
+   </section>
+   <p class="hint" style="margin-top:20px">Premium SMS customer portal. Inventory and checkout are controlled by your Supabase database. Payments are not credited until an administrator verifies the deposit.</p>
   </div>
-</div>
-</div>
-
-<!-- PAYMENT MODAL -->
-<div class="payment-modal" id="paymentModal">
-  <div class="payment-box">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2>💳 Add Wallet Balance</h2>
-      <button class="btn btn-ghost" onclick="closePayment()">✕</button>
-    </div>
-
-    <p>Deposit request submit karein. Payment verify hone ke baad admin balance update karega.</p>
-
-    <div class="payment-field">
-      <label>Deposit Amount (PKR)</label>
-      <input id="depositAmount" type="number" min="100" max="1000000" placeholder="Example: 1000">
-    </div>
-
-    <div class="payment-field">
-      <label>Payment Method</label>
-      <select id="paymentMethod">
-        <option value="JazzCash">JazzCash</option>
-        <option value="Easypaisa">Easypaisa</option>
-        <option value="Bank Transfer">Bank Transfer</option>
-      </select>
-    </div>
-
-    <div class="payment-field">
-      <label>Transaction ID / Reference</label>
-      <input id="paymentReference" type="text" maxlength="100" placeholder="Enter transaction reference">
-    </div>
-
-    <div class="payment-field">
-      <label>Sender Name (Optional)</label>
-      <input id="senderName" type="text" maxlength="100" placeholder="Your name">
-    </div>
-
-    <div class="payment-actions">
-      <button class="btn btn-ghost" onclick="closePayment()">Cancel</button>
-      <button class="btn btn-accent" onclick="submitPayment()">Submit Request ↗</button>
-    </div>
-
-    <p style="margin-bottom:0">⚠️ Balance payment receive aur verify hone ke baad hi add hoga.</p>
-  </div>
+ </main>
 </div>
 
-<!-- THEME MODAL -->
-<div class="theme-modal" id="themeModal">
-  <div class="theme-box">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 style="margin:0;font-size:14px">🎨 Choose Your Brand Colour</h3>
-      <button class="btn btn-ghost" onclick="closeTheme()" style="padding:6px 10px">✕</button>
-    </div>
-    <p style="font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5">Choose your preferred Premium SMS theme.</p>
-    <div class="swatches" id="swatches"></div>
-    <div style="display:flex;gap:8px">
-      <input type="color" id="customColor" value="#f3d07a" style="width:48px;height:38px;border-radius:9px;border:1px solid var(--border);background:transparent">
-      <button class="btn btn-accent" style="flex:1" onclick="applyCustom()">Apply Custom Colour</button>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn btn-ghost" style="flex:1" onclick="setTheme('#f3d07a')">Reset Golden</button>
-      <button class="btn btn-accent" style="flex:1" onclick="closeTheme()">Done ✓</button>
-    </div>
-  </div>
-</div>
-
+<div class="modal" id="depositModal"><div class="modal-box">
+ <div class="modal-head"><h2>💳 Add Wallet Balance</h2><button class="close" onclick="closeDeposit()">✕</button></div>
+ <p class="hint">Apni payment pehle complete karein, phir transaction reference submit karein. Admin verification ke baad balance add hoga. Payment account details support se confirm karein.</p>
+ <div class="field"><label>Deposit amount (PKR)</label><input id="depositAmount" type="number" min="100" max="1000000" step="1" placeholder="Example: 1000"></div>
+ <div class="field"><label>Payment method</label><select id="paymentMethod"><option>JazzCash</option><option>Easypaisa</option><option>Bank Transfer</option></select></div>
+ <div class="field"><label>Transaction ID / Reference</label><input id="paymentReference" maxlength="100" placeholder="Enter transaction reference"></div>
+ <div class="field"><label>Sender name (optional)</label><input id="senderName" maxlength="80" placeholder="Your name"></div>
+ <div style="display:flex;gap:9px;margin-top:18px"><button class="btn secondary" style="flex:1" onclick="closeDeposit()">Cancel</button><button class="btn primary" style="flex:1" id="depositSubmit" onclick="submitDeposit()">Submit Request</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-const SERVICES=[
-  {id:'all',label:'All Products',ico:'all',icon:'◫'},
-  {id:'usa',label:'USA Numbers',ico:'usa',icon:'🇺🇸'},
-  {id:'uk',label:'UK Numbers',ico:'usa',icon:'🇬🇧'},
-  {id:'pk',label:'PK Numbers',ico:'usa',icon:'🇵🇰'},
-  {id:'uae',label:'UAE Numbers',ico:'usa',icon:'🇦🇪'},
-  {id:'gmail',label:'Gmail Lab',ico:'gold',icon:'G'},
-  {id:'outlook',label:'Outlook Lab',ico:'all',icon:'O'},
-  {id:'toll',label:'Toll-Free',ico:'gold',icon:'☎'},
-  {id:'golden',label:'Golden / VIP',ico:'gold',icon:'💎'}
-];
+/* Supabase browser key is a publishable key. Never put a service_role/secret key in this file. */
+const SUPABASE_URL = 'https://gusiqhkydrrvihvpsahd.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const PRODUCTS=[
-  {id:1,service:'usa',country:'US',title:'USA Premium SIM Number',desc:'USA non-VoIP SIM for legitimate business communications.',stock:1417,price:40,icon:'🇺🇸'},
-  {id:2,service:'usa',country:'US',title:'USA Business Toll-Free',desc:'USA 800 Toll-Free for business, subject to provider availability.',stock:540,price:85,icon:'☎'},
-  {id:3,service:'uk',country:'GB',title:'UK Business SIM',desc:'UK business phone number for permitted business use.',stock:825,price:45,icon:'🇬🇧'},
-  {id:4,service:'uk',country:'GB',title:'UK Golden 786',desc:'UK golden number ending 786 — VIP business branding.',stock:12,price:150,icon:'💎'},
-  {id:5,service:'pk',country:'PK',title:'PK Jazz Golden',desc:'Pakistan Jazz number for legitimate communication.',stock:210,price:35,icon:'🇵🇰'},
-  {id:6,service:'pk',country:'PK',title:'PK Business SIM',desc:'Pakistan business SIM, subject to provider terms.',stock:0,price:2,icon:'🔐'},
-  {id:7,service:'uae',country:'AE',title:'UAE Du Business',desc:'UAE business number, subject to provider availability.',stock:180,price:60,icon:'🇦🇪'},
-  {id:8,service:'gmail',country:'US',title:'Gmail Business Setup',desc:'Assistance with legitimate business email setup.',stock:320,price:25,icon:'G'},
-  {id:9,service:'gmail',country:'US',title:'Custom Email Setup',desc:'Business email setup assistance.',stock:8,price:120,icon:'G'},
-  {id:10,service:'outlook',country:'US',title:'Outlook Business Setup',desc:'Outlook business email setup assistance.',stock:1500,price:8,icon:'O'},
-  {id:11,service:'toll',country:'US',title:'USA 888 Toll-Free',desc:'USA toll-free 888 series for customer care.',stock:95,price:55,icon:'☎'},
-  {id:12,service:'golden',country:'US',title:'USA Golden Pattern 786',desc:'USA golden pattern number for business branding.',stock:22,price:200,icon:'💎'}
-];
-
-let activeService='all';
-let cart={};
-
-function renderServices(){
-  const el=document.getElementById('services');
-  el.innerHTML='';
-  SERVICES.forEach(s=>{
-    const div=document.createElement('div');
-    div.className='service-pill'+(activeService===s.id?' active':'');
-    div.innerHTML=`<div class="s-ico ${s.ico}">${s.icon}</div>${s.label}`;
-    div.onclick=()=>{
-      activeService=s.id;
-      renderServices();
-      renderGrid();
-    };
-    el.appendChild(div);
-  });
-  const count=activeService==='all'?PRODUCTS.length:PRODUCTS.filter(p=>p.service===activeService).length;
-  document.getElementById('prodCount').textContent=count+' products • Premium SMS Vault';
-}
-
-function renderGrid(){
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';
-  const list=activeService==='all'?PRODUCTS:PRODUCTS.filter(p=>p.service===activeService);
-
-  list.forEach(p=>{
-    if(!cart[p.id])cart[p.id]=1;
-    const out=p.stock===0;
-    const card=document.createElement('div');
-    card.className='card';
-    card.innerHTML=`
-      <div class="card-top">
-        <div class="card-icon">${p.icon}</div>
-        <div class="card-country">${p.country}</div>
-      </div>
-      <h3 class="card-title">${p.title}</h3>
-      <p class="card-desc">${p.desc}</p>
-      <div class="stock-box">
-        <div><div class="label">In Stock</div><div class="val">${p.stock.toLocaleString()}</div></div>
-        <div style="text-align:right"><div class="label">Price</div><div class="price">Rs.${p.price}</div></div>
-      </div>
-      <div class="selects">
-        <select aria-label="Select region">
-          <option>State inventory (optional)</option>
-          <option>California</option><option>Texas</option>
-        </select>
-        <select aria-label="Select number pattern">
-          <option>Select pattern (optional)</option>
-          <option>Any</option><option>Golden 786</option>
-        </select>
-      </div>
-      <div class="matched">Matched stock: ${p.stock.toLocaleString()}</div>
-      <div class="buy-row">
-        <div class="qty">
-          <button onclick="changeQty(${p.id},-1)">−</button>
-          <span id="q-${p.id}">${cart[p.id]}</span>
-          <button onclick="changeQty(${p.id},1)">+</button>
-        </div>
-        ${out?'<button class="btn-out" disabled>Out of Stock</button>':'<button class="btn-buy" onclick="buyNow('+p.id+')">🛍 Buy Now</button>'}
-      </div>
-      <div class="subtotal">
-        <span>Subtotal:</span>
-        <strong>Rs.<span id="sub-${p.id}">${p.price*cart[p.id]}</span></strong>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function changeQty(id,d){
-  const p=PRODUCTS.find(x=>x.id===id);
-  cart[id]=Math.max(1,Math.min(p.stock,(cart[id]||1)+d));
-  document.getElementById(`q-${id}`).textContent=cart[id];
-  document.getElementById(`sub-${id}`).textContent=p.price*cart[id];
-}
-
-function buyNow(id){
-  showToast('Secure checkout abhi connect nahi hai. Support se rabta karein.');
-}
-
-function topUp(){
-  openPayment();
-}
-
-function openPayment(){
-  document.getElementById('paymentModal').classList.add('open');
-}
-
-function closePayment(){
-  document.getElementById('paymentModal').classList.remove('open');
-}
-
-function submitPayment(){
-  const amount=Number(document.getElementById('depositAmount').value);
-  const method=document.getElementById('paymentMethod').value;
-  const reference=document.getElementById('paymentReference').value.trim();
-  const sender=document.getElementById('senderName').value.trim();
-
-  if(!Number.isFinite(amount)||amount<100||amount>1000000){
-    showToast('Amount Rs.100 se Rs.1,000,000 ke darmiyan enter karein');
-    return;
+let currentUser = null, numbers = [], activeCategory = 'All', authMode = 'login', busy = false;
+const $ = id => document.getElementById(id);
+const money = n => 'Rs. ' + Number(n || 0).toLocaleString('en-PK',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3200);}
+function toggleAuthMode(){authMode=authMode==='login'?'signup':'login';$('authTitle').textContent=authMode==='login'?'Welcome back':'Create your account';$('authSubtitle').textContent=authMode==='login'?'Sign in to access your wallet and number store.':'Register with your email to create a customer account.';$('authSubmit').textContent=authMode==='login'?'Sign In':'Create Account';$('authSwitchText').textContent=authMode==='login'?"Don't have an account?":'Already registered?';$('authSwitch').textContent=authMode==='login'?'Create account':'Sign in';$('nameField').classList.toggle('hidden',authMode==='login');$('authPassword').autocomplete=authMode==='login'?'current-password':'new-password';}
+async function submitAuth(){
+ if(busy)return;const email=$('authEmail').value.trim(),password=$('authPassword').value;
+ if(!email||!password){toast('Email aur password enter karein.');return;}if(password.length<8){toast('Password kam az kam 8 characters ka hona chahiye.');return;}
+ busy=true;$('authSubmit').disabled=true;
+ try{
+  if(authMode==='signup'){
+   const name=$('fullName').value.trim();
+   const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name}}});
+   if(error)throw error;
+   if(data.session){currentUser=data.user;await enterApp();}
+   else toast('Account request created. Email confirmation complete karke sign in karein.');
+  }else{
+   const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await enterApp();
   }
-
-  if(!reference){
-    showToast('Transaction reference enter karein');
-    return;
-  }
-
-  const message=
-`Hello Premium SMS Support,
-
-I want to request a wallet deposit.
-
-Amount: Rs.${amount}
-Payment Method: ${method}
-Transaction Reference: ${reference}
-Sender Name: ${sender||'Not provided'}
-
-Please verify my payment and update my wallet balance.
-
-Thank you.`;
-
-  const whatsappURL='https://wa.me/923114484011?text='+encodeURIComponent(message);
-  window.open(whatsappURL,'_blank');
-
-  closePayment();
-  showToast('WhatsApp payment request ready hai');
+ }catch(e){toast(e.message||'Authentication failed.');}
+ finally{busy=false;$('authSubmit').disabled=false;}
 }
-
-function showToast(m){
-  const t=document.getElementById('toast');
-  t.textContent=m;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+async function enterApp(){
+ if(!currentUser)return;
+ $('authView').classList.add('hidden');$('appView').classList.remove('hidden');
+ $('userEmail').textContent=currentUser.email||'Customer';$('avatar').textContent=(currentUser.email||'P').charAt(0).toUpperCase();
+ try{await db.from('wallets').upsert({user_id:currentUser.id,balance:0},{onConflict:'user_id',ignoreDuplicates:true});}catch(e){console.warn('Wallet initialization:',e);}
+ await refreshAll();
 }
-
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
+async function signOut(){await db.auth.signOut();currentUser=null;$('appView').classList.add('hidden');$('authView').classList.remove('hidden');toast('Signed out.');}
+function showPage(page,button){
+ ['store','orders','wallet'].forEach(p=>$(p+'Page').classList.toggle('hidden',p!==page));
+ document.querySelectorAll('.nav[data-page]').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+ if(page==='orders')loadOrders();if(page==='wallet')loadWalletDetails();
+ $('sidebar').classList.remove('open');
 }
-
-function openTheme(){
-  document.getElementById('themeModal').classList.add('open');
+function toggleSidebar(){$('sidebar').classList.toggle('open');}
+async function loadBalance(){
+ const {data,error}=await db.from('wallets').select('balance').eq('user_id',currentUser.id).maybeSingle();
+ if(error)throw error;$('walletBalance').textContent=money(data?.balance||0);
 }
-
-function closeTheme(){
-  document.getElementById('themeModal').classList.remove('open');
+async function loadNumbers(){
+ $('numberGrid').innerHTML='<div class="loading">Loading available numbers...</div>';
+ const {data,error}=await db.from('phone_numbers').select('id,country,phone_number,category,price,status').eq('status','Available').order('created_at',{ascending:false}).limit(500);
+ if(error){$('numberGrid').innerHTML='<div class="empty">Inventory load nahi ho saki: '+esc(error.message)+'</div>';return;}
+ numbers=data||[];buildFilters();renderNumbers();
 }
-
-const THEMES=['#f3d07a','#0ea5e9','#22c55e','#8b5cf6','#ef4444','#f97316','#06b6d4','#ec4899'];
-
-function renderSwatches(){
-  const box=document.getElementById('swatches');
-  THEMES.forEach(hex=>{
-    const d=document.createElement('div');
-    d.className='swatch';
-    d.style.background=hex;
-    d.dataset.hex=hex;
-    d.onclick=()=>setTheme(hex);
-    box.appendChild(d);
-  });
+function buildFilters(){
+ const countries=[...new Set(numbers.map(n=>n.country).filter(Boolean))].sort();
+ const select=$('countryFilter'),old=select.value;select.innerHTML='<option value="">All countries</option>'+countries.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');select.value=countries.includes(old)?old:'';
+ const cats=['All',...new Set(numbers.map(n=>n.category).filter(Boolean)).sort()];
+ $('categoryChips').innerHTML=cats.map(c=>`<button class="chip ${activeCategory===c?'active':''}" onclick="setCategory('${esc(c).replace(/'/g,"&#39;")}')">${esc(c)}</button>`).join('');
 }
-
-function setTheme(hex){
-  const r=parseInt(hex.slice(1,3),16);
-  const g=parseInt(hex.slice(3,5),16);
-  const b=parseInt(hex.slice(5,7),16);
-
-  document.documentElement.style.setProperty('--accent',hex);
-  document.documentElement.style.setProperty('--accent-rgb',`${r},${g},${b}`);
-  document.documentElement.style.setProperty('--accent2',`rgb(${Math.min(255,r+50)},${Math.min(255,g+50)},${Math.min(255,b+50)})`);
-  document.documentElement.style.setProperty('--accent-glow',`rgba(${r},${g},${b},.28)`);
-
-  document.getElementById('logoMark').style.background=`linear-gradient(135deg,${hex},rgb(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)}))`;
-
-  try{localStorage.setItem('premium_sms_accent',hex)}catch(e){}
-
-  document.querySelectorAll('.swatch').forEach(s=>{
-    s.classList.toggle('active',s.dataset.hex===hex);
-  });
-  showToast(`Theme changed to ${hex}`);
+function setCategory(category){activeCategory=category;buildFilters();renderNumbers();}
+function flagFor(country){const c=String(country||'').toUpperCase();return ({US:'🇺🇸',USA:'🇺🇸',GB:'🇬🇧',UK:'🇬🇧',PK:'🇵🇰',AE:'🇦🇪',UAE:'🇦🇪',CA:'🇨🇦',AU:'🇦🇺'})[c]||'🌐';}
+function renderNumbers(){
+ const query=$('searchBox').value.trim().toLowerCase(),country=$('countryFilter').value;
+ const list=numbers.filter(n=>(activeCategory==='All'||n.category===activeCategory)&&(!country||n.country===country)&&(!query||[n.phone_number,n.country,n.category].some(v=>String(v||'').toLowerCase().includes(query))));
+ $('numberGrid').innerHTML=list.length?list.map(n=>`<article class="product">
+  <div class="product-top"><span class="flag">${flagFor(n.country)}</span><span class="tag">${esc(n.country||'Number')}</span></div>
+  <h3>${esc(n.category||'Phone Number')}</h3><div class="number">${esc(n.phone_number)}</div>
+  <div class="product-meta"><div><small>Availability</small><strong>In Stock</strong></div><div style="text-align:right"><small>Price</small><strong class="price">${money(n.price)}</strong></div></div>
+  <button class="btn primary" onclick="buyNumber(${Number(n.id)})">🛍 Buy This Number</button>
+ </article>`).join(''):'<div class="empty">Is filter mein koi available number nahi mila.</div>';
 }
-
-function applyCustom(){
-  setTheme(document.getElementById('customColor').value);
-  closeTheme();
+async function buyNumber(id){
+ if(busy)return;if(!confirm('Kya aap is number ko wallet balance se purchase karna chahte hain?'))return;
+ busy=true;
+ try{
+  const {data,error}=await db.rpc('purchase_phone_number',{p_phone_number_id:id});
+  if(error)throw error;
+  if(!data||data.success!==true)throw new Error('Purchase complete nahi hui.');
+  toast('Purchase successful! Number: '+data.phone_number+' | Remaining: '+money(data.remaining_balance));
+  await refreshAll();showPage('orders',null);
+ }catch(e){toast(e.message||'Purchase failed.');}
+ finally{busy=false;}
 }
-
-renderServices();
-renderGrid();
-renderSwatches();
-
-try{
-  const saved=localStorage.getItem('premium_sms_accent');
-  if(saved&&/^#[0-9a-fA-F]{6}$/.test(saved))setTheme(saved);
-}catch(e){}
+function openDeposit(){$('depositModal').classList.add('open');}
+function closeDeposit(){$('depositModal').classList.remove('open');}
+async function submitDeposit(){
+ if(busy)return;
+ const amount=Number($('depositAmount').value),method=$('paymentMethod').value,reference=$('paymentReference').value.trim(),sender=$('senderName').value.trim();
+ if(!Number.isFinite(amount)||amount<100||amount>1000000){toast('Amount Rs.100 se Rs.1,000,000 ke darmiyan enter karein.');return;}
+ if(!reference){toast('Transaction reference enter karein.');return;}
+ busy=true;$('depositSubmit').disabled=true;
+ try{
+  const fullReference=sender?`${reference} | Sender: ${sender}`:reference;
+  const {error}=await db.from('payment_requests').insert({user_id:currentUser.id,amount,method,reference:fullReference,status:'pending'});
+  if(error)throw error;
+  closeDeposit();$('depositAmount').value='';$('paymentReference').value='';$('senderName').value='';
+  toast('Deposit request submit ho gayi. Admin verification ka wait karein.');await loadWalletDetails();
+ }catch(e){toast(e.message||'Deposit request submit nahi hui.');}
+ finally{busy=false;$('depositSubmit').disabled=false;}
+}
+async function loadOrders(){
+ $('ordersBody').innerHTML='<tr><td colspan="7">Loading...</td></tr>';
+ const {data,error}=await db.from('orders').select('id,product_type,phone_number,quantity,total,status,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(100);
+ if(error){$('ordersBody').innerHTML=`<tr><td colspan="7">${esc(error.message)}</td></tr>`;return;}
+ $('ordersBody').innerHTML=data?.length?data.map(o=>`<tr><td>${esc(String(o.id).slice(0,8))}…</td><td>${esc(o.product_type)}</td><td>${esc(o.phone_number||'—')}</td><td>${esc(o.quantity)}</td><td>${money(o.total)}</td><td><span class="status ${o.status==='pending'?'pending':''}">${esc(o.status)}</span></td><td>${o.created_at?new Date(o.created_at).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="7">Abhi koi order nahi hai.</td></tr>';
+}
+async function loadWalletDetails(){
+ const [tx,pay]=await Promise.all([
+  db.from('wallet_transactions').select('type,amount,status,description,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(100),
+  db.from('payment_requests').select('amount,method,reference,status,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(100)
+ ]);
+ $('transactionsBody').innerHTML=tx.error?`<tr><td colspan="5">${esc(tx.error.message)}</td></tr>`:tx.data?.length?tx.data.map(t=>`<tr><td>${esc(t.type)}</td><td>${money(t.amount)}</td><td><span class="status ${t.status==='pending'?'pending':''}">${esc(t.status)}</span></td><td>${esc(t.description||'—')}</td><td>${t.created_at?new Date(t.created_at).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="5">No transactions yet.</td></tr>';
+ $('paymentsBody').innerHTML=pay.error?`<tr><td colspan="5">${esc(pay.error.message)}</td></tr>`:pay.data?.length?pay.data.map(p=>`<tr><td>${money(p.amount)}</td><td>${esc(p.method)}</td><td>${esc(p.reference||'—')}</td><td><span class="status ${p.status==='pending'?'pending':''}">${esc(p.status)}</span></td><td>${p.created_at?new Date(p.created_at).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="5">No deposit requests yet.</td></tr>';
+}
+async function refreshAll(){
+ if(!currentUser)return;
+ try{await Promise.all([loadBalance(),loadNumbers()]);}catch(e){toast(e.message||'Data refresh error.');}
+ if(!$('ordersPage').classList.contains('hidden'))await loadOrders();
+ if(!$('walletPage').classList.contains('hidden'))await loadWalletDetails();
+}
+db.auth.onAuthStateChange((_event,session)=>{
+ if(session?.user&&!currentUser){currentUser=session.user;setTimeout(()=>enterApp(),0);}
+ else if(!session){currentUser=null;$('appView').classList.add('hidden');$('authView').classList.remove('hidden');}
+});
+(async()=>{const {data}=await db.auth.getSession();if(data.session?.user){currentUser=data.session.user;await enterApp();}})();
 </script>
 </body>
-</html>
+</html>'''
+
+path = Path("/mnt/data/customer-dashboard.html")
+path.write_text(html, encoding="utf-8")
+print(f"Created {path} ({path.stat().st_size:,} bytes)")
