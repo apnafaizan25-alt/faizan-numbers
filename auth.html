@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faizan Numbers | Customer Account</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;display:grid;place-items:center;
+ background:#080d19;color:#f5f5f5;
+ font-family:Arial,sans-serif;padding:20px
+}
+.card{
+ width:100%;max-width:420px;padding:32px;
+ background:#111a2b;border:1px solid #26344a;
+ border-radius:18px;box-shadow:0 20px 60px #0008
+}
+.logo{text-align:center;font-size:27px;font-weight:bold;color:#e8bd69}
+.subtitle{text-align:center;color:#9aa8bc;margin:10px 0 25px}
+.tabs{display:flex;gap:10px;margin-bottom:22px}
+.tabs button{
+ flex:1;padding:12px;border:1px solid #34445c;
+ background:#18243a;color:#fff;border-radius:9px;cursor:pointer
+}
+.tabs button.active{background:#c99b4d;color:#101522}
+label{display:block;margin:15px 0 7px;color:#cbd5e1;font-size:14px}
+input{
+ width:100%;padding:14px;border-radius:9px;
+ border:1px solid #34445c;background:#091323;
+ color:white;outline:none
+}
+input:focus{border-color:#d6aa5c}
+.main{
+ width:100%;padding:14px;margin-top:22px;border:0;
+ border-radius:9px;background:#d6aa5c;color:#101522;
+ font-weight:bold;font-size:15px;cursor:pointer
+}
+.extra{text-align:center;margin-top:18px}
+.extra a{color:#e8bd69;cursor:pointer}
+#message{margin-top:17px;text-align:center;font-size:14px;line-height:1.5}
+.small{font-size:12px;color:#8291a8;text-align:center;margin-top:24px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+ <div class="logo">FAIZAN NUMBERS</div>
+ <div class="subtitle">Your account, your numbers.</div>
+
+ <div class="tabs">
+  <button id="loginTab" class="active" onclick="showForm('login')">Login</button>
+  <button id="signupTab" onclick="showForm('signup')">Create Account</button>
+ </div>
+
+ <form id="authForm">
+  <div id="nameField" class="hidden">
+   <label>Full Name</label>
+   <input id="fullName" type="text" placeholder="Enter your full name">
+  </div>
+
+  <label>Email Address</label>
+  <input id="email" type="email" placeholder="you@example.com" required>
+
+  <label>Password</label>
+  <input id="password" type="password" placeholder="Enter password" required minlength="6">
+
+  <button class="main" id="submitBtn" type="submit">Login to Account</button>
+ </form>
+
+ <div class="extra" id="forgot">
+  <a onclick="resetPassword()">Forgot password?</a>
+ </div>
+
+ <div id="message" role="status"></div>
+ <div class="small">Secure customer authentication</div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://gusiqhkydrrvihvpsahd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let mode = "login";
+
+function showMessage(text, success=false) {
+ const el = document.getElementById("message");
+ el.textContent = text;
+ el.style.color = success ? "#65d69a" : "#ff8585";
+}
+
+function showForm(type) {
+ mode = type;
+ document.getElementById("loginTab").classList.toggle("active",type==="login");
+ document.getElementById("signupTab").classList.toggle("active",type==="signup");
+ document.getElementById("nameField").classList.toggle("hidden",type!=="signup");
+ document.getElementById("forgot").classList.toggle("hidden",type!=="login");
+ document.getElementById("submitBtn").textContent =
+  type==="login" ? "Login to Account" : "Create My Account";
+ showMessage("");
+}
+
+document.getElementById("authForm").addEventListener("submit",async(e)=>{
+ e.preventDefault();
+
+ const button=document.getElementById("submitBtn");
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ const fullName=document.getElementById("fullName").value.trim();
+
+ button.disabled=true;
+ button.textContent="Please wait...";
+ showMessage("");
+
+ try {
+  if(mode==="signup") {
+   if(!fullName) throw new Error("Please enter your full name.");
+
+   const {data,error}=await db.auth.signUp({
+    email,
+    password,
+    options:{
+     data:{full_name:fullName},
+     emailRedirectTo:window.location.origin+"/faizan-numbers/"
+    }
+   });
+
+   if(error) throw error;
+
+   if(data.session) {
+    showMessage("Account created successfully. You are logged in.",true);
+   } else {
+    showMessage("Account created! Please check your email and verify your account.",true);
+   }
+  } else {
+   const {data,error}=await db.auth.signInWithPassword({email,password});
+   if(error) throw error;
+
+   showMessage("Login successful! Opening your account...",true);
+   setTimeout(()=>{
+    window.location.href="./customer-dashboard.html";
+   },1000);
+  }
+ } catch(error) {
+  showMessage(error.message || "Something went wrong.");
+ } finally {
+  button.disabled=false;
+  button.textContent=mode==="login"?"Login to Account":"Create My Account";
+ }
+});
+
+async function resetPassword() {
+ const email=document.getElementById("email").value.trim();
+ if(!email) {
+  showMessage("Please enter your email address first.");
+  return;
+ }
+
+ const {error}=await db.auth.resetPasswordForEmail(email,{
+  redirectTo:window.location.origin+"/faizan-numbers/"
+ });
+
+ if(error) showMessage(error.message);
+ else showMessage("Password reset link sent. Please check your email.",true);
+}
+</script>
+</body>
+</html>
