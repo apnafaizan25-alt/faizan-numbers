@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Payment Approvals | Faizan Numbers</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d19;color:#f4f6fb;font-family:Arial,sans-serif}
+header{background:#111a2b;border-bottom:1px solid #29364b;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:21px;font-weight:bold;color:#e8bd69}
+main{max-width:1150px;margin:35px auto;padding:0 20px}
+.card{background:#111a2b;border:1px solid #29364b;border-radius:14px;padding:22px;margin-bottom:20px}
+h1{font-size:26px}
+.muted{color:#9baac0;font-size:13px}
+button{border:0;border-radius:7px;padding:10px 14px;cursor:pointer;font-weight:bold;margin:3px}
+.refresh{background:#d6aa5c;color:#101522}
+.logout{background:#29364b;color:white}
+.approve{background:#176b49;color:white}
+.reject{background:#8b3038;color:white}
+button:disabled{opacity:.5;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{padding:13px 10px;border-bottom:1px solid #29364b;text-align:left;font-size:13px}
+th{color:#e8bd69}
+td{color:#dbe3ef}
+.table-wrap{overflow-x:auto}
+#message{margin:15px 0;line-height:1.5}
+a{color:#e8bd69}
+.pending{color:#e8bd69}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">FAIZAN NUMBERS | ADMIN</div>
+ <div>
+  <button class="refresh" id="refreshBtn">Refresh</button>
+  <button class="logout" id="logoutBtn">Logout</button>
+ </div>
+</header>
+
+<main>
+ <h1>Payment Approvals</h1>
+ <p class="muted">Review customer deposits and approve verified payments.</p>
+
+ <section class="card">
+  <h2>Payment Requests</h2>
+  <div id="message" role="status">Checking admin access...</div>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Date</th>
+      <th>Customer ID</th>
+      <th>Amount</th>
+      <th>Method</th>
+      <th>Reference</th>
+      <th>Proof</th>
+      <th>Status</th>
+      <th>Action</th>
+     </tr>
+    </thead>
+    <tbody id="requests"></tbody>
+   </table>
+  </div>
+ </section>
+</main>
+
+<script>
+const SUPABASE_URL="https://gusiqhkydrrvihvpsahd.supabase.co";
+const SUPABASE_KEY="sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const message=document.getElementById("message");
+const tbody=document.getElementById("requests");
+
+let adminReady=false;
+
+function say(text,success=false){
+ message.textContent=text;
+ message.style.color=success?"#65d69a":"#ff9999";
+}
+
+function cell(row,value){
+ const td=document.createElement("td");
+ td.textContent=value==null?"—":String(value);
+ row.appendChild(td);
+ return td;
+}
+
+function addProofLink(td,url){
+ if(!url)return;
+ try{
+  const parsed=new URL(url);
+  if(parsed.protocol!=="https:")return;
+  const link=document.createElement("a");
+  link.href=parsed.href;
+  link.target="_blank";
+  link.rel="noopener noreferrer";
+  link.textContent="View proof";
+  td.appendChild(link);
+ }catch(e){}
+}
+
+async function checkAdmin(){
+ const {data:{session},error}=await db.auth.getSession();
+ if(error)throw error;
+
+ if(!session){
+  window.location.replace("./auth.html");
+  return false;
+ }
+
+ const {data,error:adminError}=await db
+  .from("site_admins")
+  .select("user_id")
+  .eq("user_id",session.user.id)
+  .maybeSingle();
+
+ if(adminError)throw adminError;
+
+ if(!data){
+  say("Access denied. This account is not an approved admin.");
+  return false;
+ }
+
+ adminReady=true;
+ return true;
+}
+
+async function loadRequests(){
+ if(!adminReady)return;
+
+ say("Loading payment requests...",true);
+ tbody.replaceChildren();
+
+ const {data,error}=await db
+  .from("payment_requests")
+  .select("id,user_id,amount,method,reference,proof_url,status,created_at")
+  .order("created_at",{ascending:false})
+  .limit(100);
+
+ if(error)throw error;
+
+ if(!data.length){
+  say("No payment requests found.",true);
+  return;
+ }
+
+ for(const item of data){
+  const tr=document.createElement("tr");
+
+  cell(tr,new Date(item.created_at).toLocaleString());
+  cell(tr,item.user_id);
+  cell(tr,"Rs. "+Number(item.amount).toFixed(2));
+  cell(tr,item.method);
+  cell(tr,item.reference);
+  const proofCell=cell(tr,"");
+  addProofLink(proofCell,item.proof_url);
+  const statusCell=cell(tr,item.status);
+  if(item.status==="pending")statusCell.className="pending";
+
+  const actionCell=cell(tr,"");
+
+  if(item.status==="pending"){
+   const approve=document.createElement("button");
+   approve.className="approve";
+   approve.textContent="Approve";
+
+   const reject=document.createElement("button");
+   reject.className="reject";
+   reject.textContent="Reject";
+
+   approve.addEventListener("click",()=>review(item.id,"approved",approve,reject));
+   reject.addEventListener("click",()=>review(item.id,"rejected",approve,reject));
+
+   actionCell.append(approve,reject);
+  }else{
+   actionCell.textContent="Reviewed";
+  }
+
+  tbody.appendChild(tr);
+ }
+
+ say("Payment requests loaded: "+data.length,true);
+}
+
+async function review(id,decision,approveBtn,rejectBtn){
+ const note=prompt("Admin note (optional):");
+ if(note===null)return;
+
+ if(decision==="approved"){
+  const confirmed=confirm(
+   "Have you verified the actual payment in your bank or wallet? Approve and credit the customer?"
+  );
+  if(!confirmed)return;
+ }else{
+  if(!confirm("Are you sure you want to reject this payment request?"))return;
+ }
+
+ approveBtn.disabled=true;
+ rejectBtn.disabled=true;
+ say("Processing review...",true);
+
+ try{
+  const {data,error}=await db.rpc("admin_review_payment",{
+   p_payment_id:id,
+   p_decision:decision,
+   p_admin_note:note.trim()||null
+  });
+
+  if(error)throw error;
+
+  say(data||"Payment reviewed successfully.",true);
+  await loadRequests();
+ }catch(error){
+  say("Review failed: "+error.message);
+  approveBtn.disabled=false;
+  rejectBtn.disabled=false;
+ }
+}
+
+document.getElementById("refreshBtn").addEventListener("click",async()=>{
+ try{await loadRequests();}
+ catch(error){say(error.message);}
+});
+
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+ const {error}=await db.auth.signOut();
+ if(error){say(error.message);return;}
+ window.location.replace("./auth.html");
+});
+
+async function start(){
+ try{
+  const allowed=await checkAdmin();
+  if(allowed)await loadRequests();
+ }catch(error){
+  say("Error: "+error.message);
+ }
+}
+
+start();
+</script>
+</body>
+</html>
