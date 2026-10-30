@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Customer Dashboard | Faizan Numbers</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d19;color:#f4f6fb;font-family:Arial,sans-serif}
+header{padding:20px 5%;background:#111a2b;border-bottom:1px solid #29364b;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:22px;font-weight:bold;color:#e8bd69}
+button{border:0;border-radius:8px;padding:11px 16px;cursor:pointer;font-weight:bold}
+.logout{background:#29364b;color:white}
+main{max-width:1100px;margin:35px auto;padding:0 20px}
+.welcome{color:#9baac0;margin-bottom:25px}
+h1{font-size:27px;margin-bottom:8px}
+h2{font-size:18px;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:17px}
+.card{background:#111a2b;border:1px solid #29364b;border-radius:13px;padding:23px;margin-bottom:18px}
+.balance{font-size:30px;color:#e8bd69;font-weight:bold;margin-top:12px}
+.muted{color:#9baac0;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:13px 9px;border-bottom:1px solid #29364b}
+th{color:#e8bd69}
+.empty{color:#9baac0;padding:16px 0}
+.status{color:#e8bd69}
+#message{margin:20px 0;color:#ff9999}
+@media(max-width:600px){header{padding:16px}main{margin:22px auto}table{font-size:12px}.card{padding:17px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">FAIZAN NUMBERS</div>
+ <button class="logout" id="logoutBtn">Logout</button>
+</header>
+
+<main>
+ <h1>Customer Dashboard</h1>
+ <div class="welcome">Welcome, <span id="customerName">Customer</span></div>
+ <div id="message"></div>
+
+ <div class="grid">
+  <section class="card">
+   <div class="muted">Available Wallet Balance</div>
+   <div class="balance" id="balance">Rs. 0.00</div>
+  </section>
+  <section class="card">
+   <div class="muted">My Orders</div>
+   <div class="balance" id="orderCount">0</div>
+  </section>
+  <section class="card">
+   <div class="muted">Payment Requests</div>
+   <div class="balance" id="paymentCount">0</div>
+  </section>
+ </div>
+
+ <section class="card">
+  <h2>My Recent Orders</h2>
+  <div id="orders" class="empty">Loading orders...</div>
+ </section>
+
+ <section class="card">
+  <h2>Wallet Transactions</h2>
+  <div id="transactions" class="empty">Loading transactions...</div>
+ </section>
+
+ <section class="card">
+  <h2>Payment Request History</h2>
+  <div id="payments" class="empty">Loading payments...</div>
+ </section>
+</main>
+
+<script>
+const SUPABASE_URL="https://gusiqhkydrrvihvpsahd.supabase.co";
+const SUPABASE_KEY="sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const money=value=>"Rs. "+Number(value||0).toFixed(2);
+
+function showError(message){
+ document.getElementById("message").textContent=message;
+}
+
+function safe(value){
+ const span=document.createElement("span");
+ span.textContent=value==null?"—":String(value);
+ return span.innerHTML;
+}
+
+function makeTable(headers,rows){
+ if(!rows.length)return '<div class="empty">No records found yet.</div>';
+ return '<div style="overflow-x:auto"><table><thead><tr>'+
+ headers.map(h=>'<th>'+safe(h)+'</th>').join('')+
+ '</tr></thead><tbody>'+
+ rows.map(row=>'<tr>'+row.map(v=>'<td>'+safe(v)+'</td>').join('')+'</tr>').join('')+
+ '</tbody></table></div>';
+}
+
+async function loadDashboard(){
+ const {data:{session},error:sessionError}=await db.auth.getSession();
+
+ if(sessionError)throw sessionError;
+ if(!session){
+  window.location.replace("./auth.html");
+  return;
+ }
+
+ const user=session.user;
+ document.getElementById("customerName").textContent=
+  user.user_metadata?.full_name || user.email || "Customer";
+
+ const [walletResult,ordersResult,transactionsResult,paymentsResult]=
+ await Promise.all([
+  db.from("wallets").select("balance").eq("user_id",user.id).maybeSingle(),
+  db.from("orders").select("id,product_type,quantity,total,status,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(10),
+  db.from("wallet_transactions").select("type,amount,status,description,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(10),
+  db.from("payment_requests").select("amount,method,status,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(10)
+ ]);
+
+ for(const result of [walletResult,ordersResult,transactionsResult,paymentsResult]){
+  if(result.error)throw result.error;
+ }
+
+ document.getElementById("balance").textContent=
+  money(walletResult.data?.balance||0);
+
+ const orders=ordersResult.data||[];
+ const transactions=transactionsResult.data||[];
+ const payments=paymentsResult.data||[];
+
+ document.getElementById("orderCount").textContent=orders.length;
+ document.getElementById("paymentCount").textContent=payments.length;
+
+ document.getElementById("orders").innerHTML=makeTable(
+  ["Product","Quantity","Total","Status"],
+  orders.map(o=>[o.product_type,o.quantity,money(o.total),o.status])
+ );
+
+ document.getElementById("transactions").innerHTML=makeTable(
+  ["Type","Amount","Status","Description"],
+  transactions.map(t=>[t.type,money(t.amount),t.status,t.description])
+ );
+
+ document.getElementById("payments").innerHTML=makeTable(
+  ["Amount","Method","Status"],
+  payments.map(p=>[money(p.amount),p.method,p.status])
+ );
+}
+
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+ const {error}=await db.auth.signOut();
+ if(error){showError(error.message);return;}
+ window.location.replace("./auth.html");
+});
+
+loadDashboard().catch(error=>{
+ showError("Dashboard error: "+error.message);
+});
+</script>
+</body>
+</html>
