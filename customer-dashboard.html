@@ -1,1387 +1,209 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Premium SMS | SMS Verification Numbers</title>
-  <meta name="description" content="Explore available SMS verification numbers with Premium SMS. Browse supported number options and contact our team for assistance.">
-  <meta name="keywords" content="Premium SMS, SMS verification numbers, USA SMS numbers, UK SMS numbers, temporary SMS numbers">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#090a0e">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Premium SMS | SMS Verification Numbers">
-  <meta property="og:description" content="Explore available SMS number options with Premium SMS.">
-  <meta property="og:url" content="https://apnafaizan25-alt.github.io/faizan-numbers/">
-  <meta property="og:site_name" content="Premium SMS">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root {
-      --bg: #090a0e;
-      --surface: #11141c;
-      --surface2: #171b25;
-      --gold: #d9b15f;
-      --gold-light: #f1d797;
-      --text: #f7f7f8;
-      --muted: #9ca3af;
-      --border: rgba(217,177,95,.18);
-      --green: #25d366;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 90px;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: "DM Sans", Arial, sans-serif;
-      line-height: 1.6;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button, input, select {
-      font: inherit;
-    }
-
-    .container {
-      width: min(1160px, 92%);
-      margin: auto;
-    }
-
-    .announcement {
-      background: #15120b;
-      border-bottom: 1px solid var(--border);
-      color: var(--gold-light);
-      text-align: center;
-      padding: 8px 12px;
-      font-size: 12px;
-      letter-spacing: .3px;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(9,10,14,.94);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .navbar {
-      min-height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .logo {
-      font-family: "Manrope", sans-serif;
-      font-size: 23px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--gold-light);
-      white-space: nowrap;
-    }
-
-    .logo span {
-      color: white;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 27px;
-      color: #c2c5cd;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold-light);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid transparent;
-      border-radius: 7px;
-      padding: 12px 19px;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, #f0d797, #d0a54f);
-      color: #17130a;
-      box-shadow: 0 5px 20px rgba(217,177,95,.12);
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(217,177,95,.22);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--gold-light);
-      border-color: var(--border);
-    }
-
-    .btn-outline:hover {
-      background: rgba(217,177,95,.08);
-      border-color: var(--gold);
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 105px 0 90px;
-      text-align: center;
-      background:
-        radial-gradient(ellipse at 50% 0%, rgba(217,177,95,.15), transparent 58%),
-        linear-gradient(180deg, #0c0d12, #090a0e);
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 450px;
-      height: 450px;
-      border: 1px solid rgba(217,177,95,.06);
-      border-radius: 50%;
-      left: 50%;
-      top: -270px;
-      transform: translateX(-50%);
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 17px;
-    }
-
-    .hero h1 {
-      max-width: 900px;
-      margin: auto;
-      font-family: "Manrope", sans-serif;
-      font-size: clamp(38px, 6vw, 68px);
-      line-height: 1.12;
-      letter-spacing: -2px;
-      font-weight: 800;
-    }
-
-    .hero h1 span {
-      color: var(--gold-light);
-    }
-
-    .hero-description {
-      max-width: 650px;
-      margin: 22px auto 30px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.9;
-    }
-
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .trust-line {
-      margin-top: 28px;
-      color: #9298a5;
-      font-size: 12px;
-    }
-
-    .trust-line span {
-      color: var(--gold-light);
-      margin: 0 5px;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      max-width: 850px;
-      margin: 65px auto 0;
-    }
-
-    .stat {
-      background: rgba(20,23,31,.85);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 23px 12px;
-    }
-
-    .stat strong {
-      display: block;
-      font-family: "Manrope", sans-serif;
-      font-size: 27px;
-      color: var(--gold-light);
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    section {
-      padding: 82px 0;
-    }
-
-    .inventory {
-      background: #0d0f15;
-      border-top: 1px solid rgba(255,255,255,.04);
-      border-bottom: 1px solid rgba(255,255,255,.04);
-    }
-
-    .section-heading {
-      text-align: center;
-      margin-bottom: 38px;
-    }
-
-    .section-heading h2 {
-      font-family: "Manrope", sans-serif;
-      font-size: clamp(28px, 4vw, 40px);
-      line-height: 1.25;
-      margin-bottom: 10px;
-    }
-
-    .section-heading h2 span {
-      color: var(--gold-light);
-    }
-
-    .section-heading p {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: 1fr 220px 220px;
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-
-    .filters input,
-    .filters select {
-      width: 100%;
-      background: var(--surface);
-      color: white;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 14px 15px;
-      outline: none;
-      font-size: 13px;
-    }
-
-    .filters input:focus,
-    .filters select:focus {
-      border-color: var(--gold);
-    }
-
-    .filters input::placeholder {
-      color: #777f8d;
-    }
-
-    .filters option {
-      background: var(--surface);
-      color: white;
-    }
-
-    .inventory-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .inventory-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      display: inline-block;
-      border-radius: 50%;
-      background: #4bd69b;
-      box-shadow: 0 0 10px rgba(75,214,155,.6);
-    }
-
-    .refresh-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--gold-light);
-      border-radius: 6px;
-      padding: 8px 13px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .refresh-btn:hover {
-      background: rgba(217,177,95,.08);
-    }
-
-    .refresh-btn:disabled {
-      opacity: .5;
-      cursor: wait;
-    }
-
-    .number-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .number-card {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(145deg, #191d27, #11141b);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 23px;
-      transition: .25s ease;
-    }
-
-    .number-card::before {
-      content: "";
-      position: absolute;
-      height: 2px;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0;
-      transition: .25s;
-    }
-
-    .number-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(217,177,95,.5);
-      box-shadow: 0 12px 35px rgba(0,0,0,.22);
-    }
-
-    .number-card:hover::before {
-      opacity: 1;
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .tag {
-      background: rgba(217,177,95,.1);
-      color: var(--gold-light);
-      border: 1px solid var(--border);
-      padding: 5px 10px;
-      border-radius: 30px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-    }
-
-    .available {
-      color: #61d9a0;
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .phone-number {
-      font-family: "Manrope", sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: .3px;
-      overflow-wrap: anywhere;
-      margin-bottom: 7px;
-    }
-
-    .card-country {
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 21px;
-    }
-
-    .card-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      padding-top: 17px;
-    }
-
-    .price-label {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 1px;
-    }
-
-    .price {
-      color: var(--gold-light);
-      font-size: 19px;
-      font-weight: 800;
-    }
-
-    .inquiry-btn {
-      background: linear-gradient(135deg, #f0d797, #d0a54f);
-      color: #17130a;
-      padding: 10px 14px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      transition: .2s;
-    }
-
-    .inquiry-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .state-message {
-      grid-column: 1 / -1;
-      padding: 48px 20px;
-      text-align: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--muted);
-    }
-
-    .state-message h3 {
-      color: var(--gold-light);
-      margin-bottom: 8px;
-      font-size: 19px;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .feature {
-      background: linear-gradient(145deg, #171a23, #101219);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 27px;
-      transition: .2s;
-    }
-
-    .feature:hover {
-      border-color: rgba(217,177,95,.45);
-      transform: translateY(-3px);
-    }
-
-    .feature-icon {
-      width: 49px;
-      height: 49px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(217,177,95,.1);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 22px;
-      margin-bottom: 18px;
-    }
-
-    .feature h3 {
-      color: var(--gold-light);
-      font-size: 16px;
-      margin-bottom: 9px;
-    }
-
-    .feature p {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.8;
-    }
-
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 950px;
-      margin: auto;
-    }
-
-    .how-card {
-      text-align: center;
-      padding: 26px 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-
-    .step-number {
-      width: 42px;
-      height: 42px;
-      margin: 0 auto 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(217,177,95,.12);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      color: var(--gold-light);
-      font-weight: 800;
-    }
-
-    .how-card h3 {
-      color: var(--gold-light);
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
-
-    .how-card p {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .faq-list {
-      max-width: 820px;
-      margin: auto;
-    }
-
-    details {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 18px 20px;
-      margin-bottom: 12px;
-    }
-
-    summary {
-      cursor: pointer;
-      color: var(--gold-light);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    details p {
-      color: var(--muted);
-      font-size: 12px;
-      padding-top: 12px;
-      line-height: 1.8;
-    }
-
-    .contact {
-      text-align: center;
-      background:
-        radial-gradient(ellipse at center, rgba(217,177,95,.13), transparent 65%),
-        #0d0f15;
-      border-top: 1px solid var(--border);
-    }
-
-    .contact h2 {
-      font-family: "Manrope", sans-serif;
-      font-size: clamp(28px, 4vw, 40px);
-    }
-
-    .contact h2 span {
-      color: var(--gold-light);
-    }
-
-    .contact p {
-      color: var(--muted);
-      margin: 13px auto 23px;
-      font-size: 13px;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 35px 0;
-      background: #08090d;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .footer-logo {
-      color: var(--gold-light);
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 18px;
-    }
-
-    .footer-links a:hover {
-      color: var(--gold-light);
-    }
-
-    .whatsapp-float {
-      position: fixed;
-      right: 22px;
-      bottom: 22px;
-      z-index: 200;
-      background: var(--green);
-      color: white;
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      font-size: 25px;
-      box-shadow: 0 5px 25px rgba(0,0,0,.4);
-      transition: .2s;
-    }
-
-    .whatsapp-float:hover {
-      transform: scale(1.08);
-    }
-
-    @media(max-width: 900px) {
-      .nav-links {
-        gap: 15px;
-      }
-
-      .filters {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .filters input {
-        grid-column: 1 / -1;
-      }
-
-      .number-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media(max-width: 650px) {
-      .navbar {
-        min-height: 67px;
-      }
-
-      .logo {
-        font-size: 18px;
-      }
-
-      .nav-links {
-        gap: 11px;
-        font-size: 11px;
-      }
-
-      .nav-links .hide-mobile {
-        display: none;
-      }
-
-      .nav-actions .btn {
-        padding: 9px 10px;
-        font-size: 10px;
-      }
-
-      .hero {
-        padding: 75px 0 60px;
-      }
-
-      .hero h1 {
-        letter-spacing: -1px;
-      }
-
-      .hero-description {
-        font-size: 13px;
-      }
-
-      .stats {
-        gap: 8px;
-        margin-top: 40px;
-      }
-
-      .stat {
-        padding: 15px 6px;
-      }
-
-      .stat strong {
-        font-size: 20px;
-      }
-
-      .stat span {
-        font-size: 9px;
-      }
-
-      section {
-        padding: 60px 0;
-      }
-
-      .filters {
-        grid-template-columns: 1fr;
-      }
-
-      .filters input {
-        grid-column: auto;
-      }
-
-      .number-grid,
-      .features-grid,
-      .how-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .phone-number {
-        font-size: 22px;
-      }
-
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .whatsapp-float {
-        right: 15px;
-        bottom: 15px;
-        width: 49px;
-        height: 49px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Premium SMS | Customer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#070d1e;--sidebar:#0a1229;--panel:#111c36;--panel2:#152242;--panel3:#0e182f;--border:#1d2c4e;--border2:#30436d;--accent:#f3d07a;--accent2:#ffe9a8;--accent-rgb:243,208,122;--glow:rgba(243,208,122,.22);--white:#eef2ff;--muted:#91a0c1;--muted2:#68799d;--green:#22c55e;--red:#fb7185}
+*{box-sizing:border-box}html,body{min-height:100%;width:100%;overflow-x:hidden}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.hidden{display:none!important}.auth-wrap{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,#1a2b50 0,transparent 38%),var(--bg)}.auth-card{width:min(440px,100%);background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--border2);border-radius:22px;padding:28px;box-shadow:0 25px 80px #0008}.brand{display:flex;align-items:center;gap:11px;margin-bottom:25px}.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--accent),#bd9144);display:grid;place-items:center;color:#111;font-weight:900;font-size:20px}.brand strong{font-size:17px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:3px}.auth-card h1{font-size:24px;margin:0 0 7px}.muted{color:var(--muted);font-size:13px;line-height:1.6}.field{margin-top:15px}.field label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:7px}.field input,.field select{width:100%;background:#0b1530;border:1px solid var(--border2);border-radius:10px;padding:12px;color:var(--white);outline:none}.field input:focus,.field select:focus{border-color:var(--accent)}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111}.secondary{background:var(--panel);border:1px solid var(--border2);color:var(--white)}.success{background:#14532d;color:#bbf7d0}.danger{background:#4c1d2a;color:#fecdd3}.full{width:100%;margin-top:18px}.auth-switch{margin-top:16px;text-align:center;color:var(--muted);font-size:12px}.link-btn{background:none;border:0;color:var(--accent);font-weight:800}
+.layout{display:flex;min-height:100vh}.sidebar{width:255px;background:var(--sidebar);border-right:1px solid var(--border);position:fixed;inset:0 auto 0 0;overflow:auto;z-index:30;transition:.25s}.logo-area{height:68px;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--sidebar)}.logo-area .brand-mark{width:35px;height:35px;font-size:16px;border-radius:10px}.logo-area .brand{margin:0}.menu{padding:18px 12px}.menu-label{font-size:10px;color:var(--muted2);font-weight:800;letter-spacing:1px;margin:14px 10px 8px}.nav{display:flex;align-items:center;gap:11px;width:100%;padding:11px 12px;border-radius:10px;border:1px solid transparent;background:none;color:var(--muted);text-align:left;font-size:12px;font-weight:700;margin:3px 0}.nav:hover,.nav.active{background:#f3d07a18;border-color:#f3d07a44;color:var(--white)}.main{margin-left:255px;min-width:0;flex:1}.topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--border);background:#070d1eeF;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}.topbar-left,.topbar-right{display:flex;align-items:center;gap:10px}.currency,.user-chip{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:11px;font-weight:800}.user-chip{display:flex;align-items:center;gap:9px}.avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#111;font-weight:900}.content{padding:22px;max-width:1500px;margin:auto}.welcome{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 22px;border-radius:16px;border:1px solid var(--border);background:linear-gradient(100deg,#1a294b,#101a32);position:relative;overflow:hidden}.welcome:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}.welcome h2{font-size:18px;margin:5px 0}.welcome small{color:var(--muted);font-size:11px}.balance{text-align:right}.balance strong{display:block;font-size:22px;margin:4px 0 8px;color:var(--accent)}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:25px 0 14px}.section-head h1,.section-head h2{margin:0;font-size:23px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:12px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.toolbar input,.toolbar select{background:var(--panel);border:1px solid var(--border);color:var(--white);padding:10px 12px;border-radius:9px;min-width:160px}.chips{display:flex;gap:8px;overflow:auto;padding:2px 0 12px}.chip{white-space:nowrap;border:1px solid var(--border);background:var(--panel);color:var(--muted);border-radius:9px;padding:9px 13px;font-size:11px;font-weight:800}.chip.active{color:var(--white);background:#f3d07a1c;border-color:#f3d07a66}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.product{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--border);border-radius:15px;padding:16px;min-width:0}.product-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.flag{font-size:22px}.tag{font-size:10px;color:var(--muted);background:#ffffff0a;border:1px solid var(--border);border-radius:7px;padding:5px 8px}.product h3{font-size:14px;margin:0 0 8px;overflow-wrap:anywhere}.number{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent);overflow-wrap:anywhere;margin:8px 0}.product-meta{display:flex;justify-content:space-between;align-items:center;background:var(--panel3);padding:11px;border:1px solid var(--border);border-radius:9px;margin:12px 0}.product-meta small{display:block;color:var(--muted2);font-size:9px;text-transform:uppercase;letter-spacing:.6px}.product-meta strong{font-size:14px}.product-meta .price{color:var(--accent);font-size:16px}.product .btn{width:100%}.empty,.loading{padding:35px 15px;text-align:center;color:var(--muted);border:1px dashed var(--border2);border-radius:13px;font-size:13px;grid-column:1/-1}.panel{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:18px;margin-top:18px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:600px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);font-size:11px}th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}td{color:#dce4fa}.status{display:inline-block;border-radius:20px;padding:5px 8px;font-size:10px;background:#14532d;color:#bbf7d0}.status.pending{background:#713f12;color:#fde68a}.modal{position:fixed;inset:0;background:#000b;z-index:100;display:none;place-items:center;padding:15px}.modal.open{display:grid}.modal-box{width:min(460px,100%);background:var(--panel);border:1px solid var(--border2);border-radius:17px;padding:21px;max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px;margin:0}.close{background:transparent;color:var(--white);border:1px solid var(--border);border-radius:8px;padding:6px 10px}.hint{font-size:11px;color:var(--muted);line-height:1.6}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#111c36;border:1px solid var(--border2);padding:12px 16px;border-radius:10px;z-index:200;font-size:12px;transition:.2s;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.mobile-menu{display:none}
+@media(max-width:1150px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:850px){.sidebar{transform:translateX(-100%);box-shadow:18px 0 45px #0008}.sidebar.open{transform:translateX(0)}.main{margin-left:0;width:100%}.mobile-menu{display:inline-flex}.content{padding:16px}.topbar{padding:0 14px}}@media(max-width:560px){.grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.balance{text-align:left}.topbar-right .user-chip{display:none}.section-head{align-items:flex-start;flex-direction:column}.content{padding:12px}.auth-card{padding:22px}}
+</style>
 </head>
-
 <body>
+<section id="authView" class="auth-wrap">
+ <div class="auth-card">
+  <div class="brand"><div class="brand-mark">P</div><div><strong>Premium SMS</strong><small>Secure customer portal</small></div></div>
+  <h1 id="authTitle">Welcome back</h1><p class="muted" id="authSubtitle">Sign in to access your wallet and number store.</p>
+  <div id="nameField" class="field hidden"><label>Full name (optional)</label><input id="fullName" maxlength="100" placeholder="Your name"></div>
+  <div class="field"><label>Email address</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+  <div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></div>
+  <button class="btn primary full" id="authSubmit" onclick="submitAuth()">Sign In</button>
+  <div class="auth-switch"><span id="authSwitchText">Don't have an account?</span> <button class="link-btn" id="authSwitch" onclick="toggleAuthMode()">Create account</button></div>
+  <p class="hint" style="margin-top:18px">Use your own account and only purchase numbers/services you are authorized to use. Never share your password or OTP.</p>
+ </div>
+</section>
 
-<div class="announcement">
-  Welcome to Premium SMS — Explore our available number inventory
+<div id="appView" class="layout hidden">
+ <aside class="sidebar" id="sidebar">
+  <div class="logo-area"><div class="brand-mark">P</div><div class="brand"><div><strong>Premium SMS</strong><small>Customer portal</small></div></div></div>
+  <nav class="menu">
+   <div class="menu-label">Store</div>
+   <button class="nav active" data-page="store" onclick="showPage('store',this)">🏠 Number Store</button>
+   <button class="nav" data-page="orders" onclick="showPage('orders',this)">🧾 My Orders</button>
+   <button class="nav" data-page="wallet" onclick="showPage('wallet',this)">👛 Wallet & Deposits</button>
+   <div class="menu-label">Account</div>
+   <a class="nav" href="https://wa.me/923114484011?text=Hello%20Premium%20SMS" target="_blank" rel="noopener">💬 WhatsApp Support</a>
+   <button class="nav" onclick="signOut()">↪ Sign Out</button>
+  </nav>
+ </aside>
+ <main class="main">
+  <header class="topbar">
+   <div class="topbar-left"><button class="btn secondary mobile-menu" onclick="toggleSidebar()">☰</button><div class="currency">₨ &nbsp; Currency: PKR</div></div>
+   <div class="topbar-right"><button class="btn secondary" onclick="refreshAll()">↻ Refresh</button><div class="user-chip"><div class="avatar" id="avatar">P</div><span id="userEmail">Customer</span></div></div>
+  </header>
+  <div class="content">
+   <section class="welcome"><div><small>WELCOME TO YOUR ACCOUNT</small><h2>Premium SMS — Official Store</h2><small>Secure inventory • Wallet checkout • Order history</small></div><div class="balance"><small>Available wallet balance</small><strong id="walletBalance">Rs. 0.00</strong><button class="btn primary" onclick="openDeposit()">＋ Add Balance</button></div></section>
+   <section id="storePage">
+    <div class="section-head"><div><h1>Number Store</h1><p>Live inventory loaded from your connected database.</p></div><button class="btn secondary" onclick="loadNumbers()">↻ Reload stock</button></div>
+    <div class="toolbar"><input id="searchBox" placeholder="Search number, country or category..." oninput="renderNumbers()"><select id="countryFilter" onchange="renderNumbers()"><option value="">All countries</option></select></div>
+    <div class="chips" id="categoryChips"></div>
+    <div class="grid" id="numberGrid"><div class="loading">Loading available inventory...</div></div>
+   </section>
+   <section id="ordersPage" class="hidden">
+    <div class="section-head"><div><h1>My Orders</h1><p>Your purchases linked to your account.</p></div><button class="btn secondary" onclick="loadOrders()">↻ Refresh orders</button></div>
+    <div class="panel table-wrap"><table><thead><tr><th>Order ID</th><th>Product</th><th>Number</th><th>Quantity</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="ordersBody"><tr><td colspan="7">Loading...</td></tr></tbody></table></div>
+   </section>
+   <section id="walletPage" class="hidden">
+    <div class="section-head"><div><h1>Wallet & Deposits</h1><p>Submit a deposit request. Admin verifies it before crediting your wallet.</p></div><button class="btn primary" onclick="openDeposit()">＋ Add Balance</button></div>
+    <div class="panel"><h3 style="margin:0 0 5px;font-size:14px">Wallet transactions</h3><div class="table-wrap"><table><thead><tr><th>Type</th><th>Amount</th><th>Status</th><th>Description</th><th>Date</th></tr></thead><tbody id="transactionsBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
+    <div class="panel"><h3 style="margin:0 0 5px;font-size:14px">My deposit requests</h3><div class="table-wrap"><table><thead><tr><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th><th>Date</th></tr></thead><tbody id="paymentsBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
+   </section>
+  </div>
+ </main>
 </div>
 
-<header>
-  <div class="container navbar">
-
-    <a class="logo" href="#home">PREMIUM <span>SMS</span></a>
-
-    <nav class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#numbers">Numbers</a>
-      <a href="#features" class="hide-mobile">Features</a>
-      <a href="#faq" class="hide-mobile">FAQ</a>
-      <a href="#contact">Contact</a>
-    </nav>
-
-    <div class="nav-actions">
-      <a href="auth.html" class="btn btn-outline">Login</a>
-      <a href="auth.html" class="btn btn-gold">Get Started</a>
-    </div>
-
-  </div>
-</header>
-
-<main>
-
-  <section class="hero" id="home">
-    <div class="container hero-content">
-
-      <div class="eyebrow">Welcome to Premium SMS</div>
-
-      <h1>
-        Your Gateway to
-        <span>SMS Verification</span>
-      </h1>
-
-      <p class="hero-description">
-        Explore our available SMS number inventory.
-        Browse supported options, check availability and contact
-        our team for assistance with your requirements.
-      </p>
-
-      <div class="hero-actions">
-        <a href="#numbers" class="btn btn-gold">Explore Numbers →</a>
-        <a href="#contact" class="btn btn-outline">Contact Our Team</a>
-      </div>
-
-      <div class="trust-line">
-        <span>●</span> Available inventory
-        <span>●</span> Direct support
-        <span>●</span> Simple ordering
-      </div>
-
-      <div class="stats">
-
-        <div class="stat">
-          <strong id="totalNumbers">—</strong>
-          <span>Available Numbers</span>
-        </div>
-
-        <div class="stat">
-          <strong>USA & UK</strong>
-          <span>Supported Countries</span>
-        </div>
-
-        <div class="stat">
-          <strong>Direct</strong>
-          <span>Customer Support</span>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <section class="inventory" id="numbers">
-    <div class="container">
-
-      <div class="section-heading">
-        <div class="eyebrow">Our Inventory</div>
-        <h2>Explore Available <span>Numbers</span></h2>
-        <p>Browse our current inventory and find an available option.</p>
-      </div>
-
-      <div class="filters">
-
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="Search phone number or category..."
-          aria-label="Search inventory"
-        >
-
-        <select id="countryFilter" aria-label="Filter by country">
-          <option value="all">All Countries</option>
-        </select>
-
-        <select id="categoryFilter" aria-label="Filter by category">
-          <option value="all">All Categories</option>
-        </select>
-
-      </div>
-
-      <div class="inventory-top">
-
-        <div class="inventory-status">
-          <span class="live-dot"></span>
-          <span id="resultsCount">Loading inventory...</span>
-        </div>
-
-        <button class="refresh-btn" id="refreshBtn" type="button">
-          ↻ Refresh Inventory
-        </button>
-
-      </div>
-
-      <div class="number-grid" id="numberGrid">
-
-        <div class="state-message">
-          <h3>Loading Inventory</h3>
-          Please wait while we load available numbers.
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <section id="features">
-    <div class="container">
-
-      <div class="section-heading">
-        <div class="eyebrow">Why Premium SMS</div>
-        <h2>A Simple <span>Customer Experience</span></h2>
-        <p>Explore our inventory and get assistance from our team.</p>
-      </div>
-
-      <div class="features-grid">
-
-        <div class="feature">
-          <div class="feature-icon">📱</div>
-          <h3>Browse Inventory</h3>
-          <p>Explore available number options and check their listed details.</p>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">⚡</div>
-          <h3>Simple Ordering</h3>
-          <p>Choose an available option and contact our team to discuss your order.</p>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">💬</div>
-          <h3>Direct Assistance</h3>
-          <p>Get in touch with our support team for questions and order assistance.</p>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <section id="how-it-works" style="background:#0d0f15;">
-    <div class="container">
-
-      <div class="section-heading">
-        <div class="eyebrow">Getting Started</div>
-        <h2>How It <span>Works</span></h2>
-        <p>Three simple steps to get started.</p>
-      </div>
-
-      <div class="how-grid">
-
-        <div class="how-card">
-          <div class="step-number">01</div>
-          <h3>Explore Numbers</h3>
-          <p>Browse the available inventory and choose an option.</p>
-        </div>
-
-        <div class="how-card">
-          <div class="step-number">02</div>
-          <h3>Create an Account</h3>
-          <p>Sign in or create an account to access customer services.</p>
-        </div>
-
-        <div class="how-card">
-          <div class="step-number">03</div>
-          <h3>Contact Our Team</h3>
-          <p>Ask our team about availability and the next steps.</p>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="container">
-
-      <div class="section-heading">
-        <div class="eyebrow">Help Center</div>
-        <h2>Frequently Asked <span>Questions</span></h2>
-      </div>
-
-      <div class="faq-list">
-
-        <details>
-          <summary>How can I order a number?</summary>
-          <p>Browse the available inventory, select an option and contact our team through WhatsApp for assistance.</p>
-        </details>
-
-        <details>
-          <summary>Which countries are currently supported?</summary>
-          <p>Our current inventory supports USA and UK numbers. Additional countries may be introduced in the future.</p>
-        </details>
-
-        <details>
-          <summary>How can I check the price?</summary>
-          <p>The listed price is displayed on each number card. Contact our team if you need more information.</p>
-        </details>
-
-        <details>
-          <summary>Can I create a customer account?</summary>
-          <p>Yes. Use the Login or Get Started button to access the account page.</p>
-        </details>
-
-        <details>
-          <summary>Are all numbers guaranteed to work with every service?</summary>
-          <p>No. Compatibility depends on the number, provider and the receiving service. Please confirm supported use before ordering. Use numbers only where permitted by the relevant service.</p>
-        </details>
-
-      </div>
-
-    </div>
-  </section>
-
-  <section class="contact" id="contact">
-    <div class="container">
-
-      <div class="eyebrow">We're Here to Help</div>
-
-      <h2>Have a <span>Question?</span></h2>
-
-      <p>
-        Contact our team for inventory questions and order assistance.
-      </p>
-
-      <a
-        class="btn btn-gold"
-        href="https://wa.me/923114484011"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Chat on WhatsApp →
-      </a>
-
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <div class="container footer-content">
-
-    <div>
-      <div class="footer-logo">PREMIUM SMS</div>
-      <div style="margin-top:5px;">
-        SMS number inventory and customer support.
-      </div>
-    </div>
-
-    <div class="footer-links">
-      <a href="#home">Home</a>
-      <a href="#numbers">Numbers</a>
-      <a href="auth.html">Account</a>
-      <a href="#contact">Contact</a>
-    </div>
-
-    <div>
-      © <span id="year"></span> Premium SMS. All rights reserved.
-    </div>
-
-  </div>
-</footer>
-
-<a
-  class="whatsapp-float"
-  href="https://wa.me/923114484011"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Chat on WhatsApp"
->✆</a>
+<div class="modal" id="depositModal"><div class="modal-box">
+ <div class="modal-head"><h2>💳 Add Wallet Balance</h2><button class="close" onclick="closeDeposit()">✕</button></div>
+ <p class="hint">Apni payment pehle complete karein, phir transaction reference submit karein. Admin verification ke baad balance add hoga. Payment account details support se confirm karein.</p>
+ <div class="field"><label>Deposit amount (PKR)</label><input id="depositAmount" type="number" min="100" max="1000000" step="1" placeholder="Example: 1000"></div>
+ <div class="field"><label>Payment method</label><select id="paymentMethod"><option>JazzCash</option><option>Easypaisa</option><option>Bank Transfer</option></select></div>
+ <div class="field"><label>Transaction ID / Reference</label><input id="paymentReference" maxlength="100" placeholder="Enter transaction reference"></div>
+ <div class="field"><label>Sender name (optional)</label><input id="senderName" maxlength="80" placeholder="Your name"></div>
+ <div style="display:flex;gap:9px;margin-top:18px"><button class="btn secondary" style="flex:1" onclick="closeDeposit()">Cancel</button><button class="btn primary" style="flex:1" id="depositSubmit" onclick="submitDeposit()">Submit Request</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
 
 <script>
-  // ==========================================
-  // PREMIUM SMS - SUPABASE CONFIGURATION
-  // Existing project and database are preserved.
-  // ==========================================
+/* Supabase browser key is a publishable key. Never put a service_role/secret key in this file. */
+const SUPABASE_URL = 'https://gusiqhkydrrvihvpsahd.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const SUPABASE_URL = "https://gusiqhkydrrvihvpsahd.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_XUqhfy-mc7yj5Jjg4PCqsQ_Z5kexUgQ";
-
-  const WHATSAPP_NUMBER = "923114484011";
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-  // HTML elements
-  const numberGrid = document.getElementById("numberGrid");
-  const searchInput = document.getElementById("searchInput");
-  const countryFilter = document.getElementById("countryFilter");
-  const categoryFilter = document.getElementById("categoryFilter");
-  const resultsCount = document.getElementById("resultsCount");
-  const totalNumbers = document.getElementById("totalNumbers");
-  const refreshBtn = document.getElementById("refreshBtn");
-
-  let allNumbers = [];
-  let isLoading = false;
-
-  document.getElementById("year").textContent =
-    new Date().getFullYear();
-
-  // Show a message inside the inventory area.
-  function showMessage(title, message) {
-    numberGrid.replaceChildren();
-
-    const box = document.createElement("div");
-    box.className = "state-message";
-
-    const heading = document.createElement("h3");
-    heading.textContent = title;
-
-    const paragraph = document.createElement("p");
-    paragraph.textContent = message;
-
-    box.append(heading, paragraph);
-    numberGrid.appendChild(box);
+let currentUser = null, numbers = [], activeCategory = 'All', authMode = 'login', busy = false;
+const $ = id => document.getElementById(id);
+const money = n => 'Rs. ' + Number(n || 0).toLocaleString('en-PK',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3200);}
+function toggleAuthMode(){authMode=authMode==='login'?'signup':'login';$('authTitle').textContent=authMode==='login'?'Welcome back':'Create your account';$('authSubtitle').textContent=authMode==='login'?'Sign in to access your wallet and number store.':'Register with your email to create a customer account.';$('authSubmit').textContent=authMode==='login'?'Sign In':'Create Account';$('authSwitchText').textContent=authMode==='login'?"Don't have an account?":'Already registered?';$('authSwitch').textContent=authMode==='login'?'Create account':'Sign in';$('nameField').classList.toggle('hidden',authMode==='login');$('authPassword').autocomplete=authMode==='login'?'current-password':'new-password';}
+async function submitAuth(){
+ if(busy)return;const email=$('authEmail').value.trim(),password=$('authPassword').value;
+ if(!email||!password){toast('Email aur password enter karein.');return;}if(password.length<8){toast('Password kam az kam 8 characters ka hona chahiye.');return;}
+ busy=true;$('authSubmit').disabled=true;
+ try{
+  if(authMode==='signup'){
+   const name=$('fullName').value.trim();
+   const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name}}});
+   if(error)throw error;
+   if(data.session){currentUser=data.user;await enterApp();}
+   else toast('Account request created. Email confirmation complete karke sign in karein.');
+  }else{
+   const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await enterApp();
   }
-
-  // Create WhatsApp inquiry link.
-  function makeWhatsAppLink(number) {
-    const message =
-      `Hello Premium SMS, I am interested in this number: ${number}`;
-
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  }
-
-  // Format database price without assuming a currency.
-  function formatPrice(price) {
-    if (
-      price === null ||
-      price === undefined ||
-      String(price).trim() === ""
-    ) {
-      return "Contact Us";
-    }
-
-    return String(price);
-  }
-
-  // Safely populate filter dropdowns.
-  function populateFilters() {
-    const previousCountry = countryFilter.value;
-    const previousCategory = categoryFilter.value;
-
-    countryFilter.replaceChildren();
-    categoryFilter.replaceChildren();
-
-    const allCountries = document.createElement("option");
-    allCountries.value = "all";
-    allCountries.textContent = "All Countries";
-    countryFilter.appendChild(allCountries);
-
-    const allCategories = document.createElement("option");
-    allCategories.value = "all";
-    allCategories.textContent = "All Categories";
-    categoryFilter.appendChild(allCategories);
-
-    const countries = [...new Set(
-      allNumbers.map(item => item.country).filter(Boolean)
-    )].sort();
-
-    const categories = [...new Set(
-      allNumbers.map(item => item.category).filter(Boolean)
-    )].sort();
-
-    countries.forEach(country => {
-      const option = document.createElement("option");
-      option.value = country;
-      option.textContent = country;
-      countryFilter.appendChild(option);
-    });
-
-    categories.forEach(category => {
-      const option = document.createElement("option");
-      option.value = category;
-      option.textContent = category;
-      categoryFilter.appendChild(option);
-    });
-
-    if (countries.includes(previousCountry)) {
-      countryFilter.value = previousCountry;
-    }
-
-    if (categories.includes(previousCategory)) {
-      categoryFilter.value = previousCategory;
-    }
-  }
-
-  // Create an inventory card safely.
-  function createNumberCard(item) {
-    const card = document.createElement("article");
-    card.className = "number-card";
-
-    const top = document.createElement("div");
-    top.className = "card-top";
-
-    const tag = document.createElement("span");
-    tag.className = "tag";
-    tag.textContent = item.category || "SMS Number";
-
-    const status = document.createElement("span");
-    status.className = "available";
-    status.textContent = "● Available";
-
-    top.append(tag, status);
-
-    const phone = document.createElement("div");
-    phone.className = "phone-number";
-    phone.textContent = item.phone_number || "Number unavailable";
-
-    const country = document.createElement("div");
-    country.className = "card-country";
-    country.textContent = item.country || "Country not specified";
-
-    const bottom = document.createElement("div");
-    bottom.className = "card-bottom";
-
-    const priceBox = document.createElement("div");
-
-    const priceLabel = document.createElement("div");
-    priceLabel.className = "price-label";
-    priceLabel.textContent = "PRICE";
-
-    const price = document.createElement("div");
-    price.className = "price";
-    price.textContent = formatPrice(item.price);
-
-    priceBox.append(priceLabel, price);
-
-    const inquiry = document.createElement("a");
-    inquiry.className = "inquiry-btn";
-    inquiry.textContent = "Inquire Now";
-    inquiry.href = makeWhatsAppLink(item.phone_number || "");
-    inquiry.target = "_blank";
-    inquiry.rel = "noopener noreferrer";
-
-    bottom.append(priceBox, inquiry);
-    card.append(top, phone, country, bottom);
-
-    return card;
-  }
-
-  // Apply search and filters.
-  function renderNumbers() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    const selectedCountry = countryFilter.value;
-    const selectedCategory = categoryFilter.value;
-
-    const filtered = allNumbers.filter(item => {
-      const searchableText = [
-        item.phone_number,
-        item.country,
-        item.category,
-        item.price
-      ].join(" ").toLowerCase();
-
-      const matchesSearch =
-        searchableText.includes(searchTerm);
-
-      const matchesCountry =
-        selectedCountry === "all" ||
-        item.country === selectedCountry;
-
-      const matchesCategory =
-        selectedCategory === "all" ||
-        item.category === selectedCategory;
-
-      return matchesSearch && matchesCountry && matchesCategory;
-    });
-
-    numberGrid.replaceChildren();
-
-    resultsCount.textContent =
-      `${filtered.length} number${filtered.length === 1 ? "" : "s"} found`;
-
-    if (filtered.length === 0) {
-      showMessage(
-        allNumbers.length === 0
-          ? "No Numbers Available"
-          : "No Results Found",
-        allNumbers.length === 0
-          ? "Please check again later or contact our team."
-          : "Try a different search or filter."
-      );
-
-      return;
-    }
-
-    const fragment = document.createDocumentFragment();
-
-    filtered.forEach(item => {
-      fragment.appendChild(createNumberCard(item));
-    });
-
-    numberGrid.appendChild(fragment);
-  }
-
-  // Load available numbers from the existing Supabase table.
-  async function loadNumbers() {
-    if (isLoading) return;
-
-    isLoading = true;
-    refreshBtn.disabled = true;
-    refreshBtn.textContent = "Loading...";
-    resultsCount.textContent = "Loading inventory...";
-
-    try {
-      const { data, error } = await supabaseClient
-        .from("phone_numbers")
-        .select("id,country,phone_number,category,price,status,created_at")
-        .eq("status", "Available")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        throw error;
-      }
-
-      allNumbers = data || [];
-
-      totalNumbers.textContent = allNumbers.length;
-
-      populateFilters();
-      renderNumbers();
-
-    } catch (error) {
-      console.error("Premium SMS inventory error:", error);
-
-      totalNumbers.textContent = "—";
-      resultsCount.textContent = "Inventory unavailable";
-
-      showMessage(
-        "Unable to Load Inventory",
-        "Please refresh the page. If the problem continues, contact our support team."
-      );
-
-    } finally {
-      isLoading = false;
-      refreshBtn.disabled = false;
-      refreshBtn.textContent = "↻ Refresh Inventory";
-    }
-  }
-
-  // Search and filter events.
-  searchInput.addEventListener("input", renderNumbers);
-  countryFilter.addEventListener("change", renderNumbers);
-  categoryFilter.addEventListener("change", renderNumbers);
-  refreshBtn.addEventListener("click", loadNumbers);
-
-  // Initial inventory load.
-  loadNumbers();
-
-  // Refresh inventory every 60 seconds.
-  setInterval(loadNumbers, 60000);
+ }catch(e){toast(e.message||'Authentication failed.');}
+ finally{busy=false;$('authSubmit').disabled=false;}
+}
+async function enterApp(){
+ if(!currentUser)return;
+ $('authView').classList.add('hidden');$('appView').classList.remove('hidden');
+ $('userEmail').textContent=currentUser.email||'Customer';$('avatar').textContent=(currentUser.email||'P').charAt(0).toUpperCase();
+ try{await db.from('wallets').upsert({user_id:currentUser.id,balance:0},{onConflict:'user_id',ignoreDuplicates:true});}catch(e){console.warn('Wallet initialization:',e);}
+ await refreshAll();
+}
+async function signOut(){await db.auth.signOut();currentUser=null;$('appView').classList.add('hidden');$('authView').classList.remove('hidden');toast('Signed out.');}
+function showPage(page,button){
+ ['store','orders','wallet'].forEach(p=>$(p+'Page').classList.toggle('hidden',p!==page));
+ document.querySelectorAll('.nav[data-page]').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+ if(page==='orders')loadOrders();if(page==='wallet')loadWalletDetails();
+ $('sidebar').classList.remove('open');
+}
+function toggleSidebar(){$('sidebar').classList.toggle('open');}
+async function loadBalance(){
+ const {data,error}=await db.from('wallets').select('balance').eq('user_id',currentUser.id).maybeSingle();
+ if(error)throw error;$('walletBalance').textContent=money(data?.balance||0);
+}
+async function loadNumbers(){
+ $('numberGrid').innerHTML='<div class="loading">Loading available numbers...</div>';
+ const {data,error}=await db.from('phone_numbers').select('id,country,phone_number,category,price,status').eq('status','Available').order('created_at',{ascending:false}).limit(500);
+ if(error){$('numberGrid').innerHTML='<div class="empty">Inventory load nahi ho saki: '+esc(error.message)+'</div>';return;}
+ numbers=data||[];buildFilters();renderNumbers();
+}
+function buildFilters(){
+ const countries=[...new Set(numbers.map(n=>n.country).filter(Boolean))].sort();
+ const select=$('countryFilter'),old=select.value;select.innerHTML='<option value="">All countries</option>'+countries.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');select.value=countries.includes(old)?old:'';
+ const cats=['All',...new Set(numbers.map(n=>n.category).filter(Boolean)).sort()];
+ $('categoryChips').innerHTML=cats.map(c=>`<button class="chip ${activeCategory===c?'active':''}" onclick="setCategory('${esc(c).replace(/'/g,"&#39;")}')">${esc(c)}</button>`).join('');
+}
+function setCategory(category){activeCategory=category;buildFilters();renderNumbers();}
+function flagFor(country){const c=String(country||'').toUpperCase();return ({US:'🇺🇸',USA:'🇺🇸',GB:'🇬🇧',UK:'🇬🇧',PK:'🇵🇰',AE:'🇦🇪',UAE:'🇦🇪',CA:'🇨🇦',AU:'🇦🇺'})[c]||'🌐';}
+function renderNumbers(){
+ const query=$('searchBox').value.trim().toLowerCase(),country=$('countryFilter').value;
+ const list=numbers.filter(n=>(activeCategory==='All'||n.category===activeCategory)&&(!country||n.country===country)&&(!query||[n.phone_number,n.country,n.category].some(v=>String(v||'').toLowerCase().includes(query))));
+ $('numberGrid').innerHTML=list.length?list.map(n=>`<article class="product">
+  <div class="product-top"><span class="flag">${flagFor(n.country)}</span><span class="tag">${esc(n.country||'Number')}</span></div>
+  <h3>${esc(n.category||'Phone Number')}</h3><div class="number">${esc(n.phone_number)}</div>
+  <div class="product-meta"><div><small>Availability</small><strong>In Stock</strong></div><div style="text-align:right"><small>Price</small><strong class="price">${money(n.price)}</strong></div></div>
+  <button class="btn primary" onclick="buyNumber(${Number(n.id)})">🛍 Buy This Number</button>
+ </article>`).join(''):'<div class="empty">Is filter mein koi available number nahi mila.</div>';
+}
+async function buyNumber(id){
+ if(busy)return;if(!confirm('Kya aap is number ko wallet balance se purchase karna chahte hain?'))return;
+ busy=true;
+ try{
+  const {data,error}=await db.rpc('purchase_phone_number',{p_phone_number_id:id});
+  if(error)throw error;
+  if(!data||data.success!==true)throw new Error('Purchase complete nahi hui.');
+  toast('Purchase successful! Number: '+data.phone_number+' | Remaining: '+money(data.remaining_balance));
+  await refreshAll();showPage('orders',null);
+ }catch(e){toast(e.message||'Purchase failed.');}
+ finally{busy=false;}
+}
+function openDeposit(){$('depositModal').classList.add('open');}
+function closeDeposit(){$('depositModal').classList.remove('open');}
+async function submitDeposit(){
+ if(busy)return;
+ const amount=Number($('depositAmount').value),method=$('paymentMethod').value,reference=$('paymentReference').value.trim(),sender=$('senderName').value.trim();
+ if(!Number.isFinite(amount)||amount<100||amount>1000000){toast('Amount Rs.100 se Rs.1,000,000 ke darmiyan enter karein.');return;}
+ if(!reference){toast('Transaction reference enter karein.');return;}
+ busy=true;$('depositSubmit').disabled=true;
+ try{
+  const fullReference=sender?`${reference} | Sender: ${sender}`:reference;
+  const {error}=await db.from('payment_requests').insert({user_id:currentUser.id,amount,method,reference:fullReference,status:'pending'});
+  if(error)throw error;
+  closeDeposit();$('depositAmount').value='';$('paymentReference').value='';$('senderName').value='';
+  toast('Deposit request submit ho gayi. Admin verification ka wait karein.');await loadWalletDetails();
+ }catch(e){toast(e.message||'Deposit request submit nahi hui.');}
+ finally{busy=false;$('depositSubmit').disabled=false;}
+}
+async function loadOrders(){
+ $('ordersBody').innerHTML='<tr><td colspan="7">Loading...</td></tr>';
+ const {data,error}=await db.from('orders').select('id,product_type,phone_number,quantity,total,status,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(100);
+ if(error){$('ordersBody').innerHTML=`<tr><td colspan="7">${esc(error.message)}</td></tr>`;return;}
+ $('ordersBody').innerHTML=data?.length?data.map(o=>`<tr><td>${esc(String(o.id).slice(0,8))}…</td><td>${esc(o.product_type)}</td><td>${esc(o.phone_number||'—')}</td><td>${esc(o.quantity)}</td><td>${money(o.total)}</td><td><span class="status ${o.status==='pending'?'pending':''}">${esc(o.status)}</span></td><td>${o.created_at?new Date(o.created_at).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="7">Abhi koi order nahi hai.</td></tr>';
+}
+async function loadWalletDetails(){
+ const [tx,pay]=await Promise.all([
+  db.from('wallet_transactions').select('type,amount,status,description,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(100),
+  db.from('payment_requests').select('amount,method,reference,status,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(100)
+ ]);
+ $('transactionsBody').innerHTML=tx.error?`<tr><td colspan="5">${esc(tx.error.message)}</td></tr>`:tx.data?.length?tx.data.map(t=>`<tr><td>${esc(t.type)}</td><td>${money(t.amount)}</td><td><span class="status ${t.status==='pending'?'pending':''}">${esc(t.status)}</span></td><td>${esc(t.description||'—')}</td><td>${t.created_at?new Date(t.created_at).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="5">No transactions yet.</td></tr>';
+ $('paymentsBody').innerHTML=pay.error?`<tr><td colspan="5">${esc(pay.error.message)}</td></tr>`:pay.data?.length?pay.data.map(p=>`<tr><td>${money(p.amount)}</td><td>${esc(p.method)}</td><td>${esc(p.reference||'—')}</td><td><span class="status ${p.status==='pending'?'pending':''}">${esc(p.status)}</span></td><td>${p.created_at?new Date(p.created_at).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="5">No deposit requests yet.</td></tr>';
+}
+async function refreshAll(){
+ if(!currentUser)return;
+ try{await Promise.all([loadBalance(),loadNumbers()]);}catch(e){toast(e.message||'Data refresh error.');}
+ if(!$('ordersPage').classList.contains('hidden'))await loadOrders();
+ if(!$('walletPage').classList.contains('hidden'))await loadWalletDetails();
+}
+db.auth.onAuthStateChange((_event,session)=>{
+ if(session?.user&&!currentUser){currentUser=session.user;setTimeout(()=>enterApp(),0);}
+ else if(!session){currentUser=null;$('appView').classList.add('hidden');$('authView').classList.remove('hidden');}
+});
+(async()=>{const {data}=await db.auth.getSession();if(data.session?.user){currentUser=data.session.user;await enterApp();}})();
 </script>
-
 </body>
 </html>
